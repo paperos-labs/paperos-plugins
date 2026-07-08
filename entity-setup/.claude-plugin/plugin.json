@@ -1,0 +1,13 @@
+{
+  "name": "paperos-entity-setup",
+  "version": "0.1.0",
+  "description": "PaperOS Entity Setup for Claude: form and manage legal entities (LLC, C-Corp, LP, funds) in chat. Bundles the PaperOS connector (formation workflow + knowledge-base tools) with the skills that drive it.",
+  "author": {
+    "name": "PaperOS",
+    "email": "jai@paperos.com"
+  },
+  "homepage": "https://github.com/paperos-labs/paperos-plugins/tree/main/entity-setup",
+  "repository": "https://github.com/paperos-labs/paperos-plugins",
+  "license": "UNLICENSED",
+  "keywords": ["paperos", "entity", "formation", "legal", "fund", "mcp"]
+}

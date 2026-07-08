@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "paperos": {
+      "type": "http",
+      "url": "https://launch.onpaper.co/mcp",
+      "title": "PaperOS Entity Setup",
+      "description": "Form and manage PaperOS legal entities: profile, formation workflow, steering questions, field predictions, review dashboards, and the PaperOS knowledge bases (kb_search)."
+    }
+  }
+}

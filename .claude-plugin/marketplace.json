@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "paperos",
+  "version": "0.1.0",
+  "description": "PaperOS plugins for Claude — install PaperOS tools (entity formation, infra deploy, …) directly in Claude chat.",
+  "owner": {
+    "name": "PaperOS",
+    "email": "jai@paperos.com"
+  },
+  "plugins": [
+    {
+      "name": "paperos-entity-setup",
+      "source": "./entity-setup",
+      "description": "Form and manage PaperOS legal entities (LLC, C-Corp, LP, funds) in chat — the formation workflow + knowledge-base tools, with the skills that drive them.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["paperos", "entity", "formation", "legal", "fund"]
+    },
+    {
+      "name": "paperos-deploy-mcp",
+      "source": "./deploy",
+      "description": "Deploy applications to PaperOS infrastructure via a single tool call — provisions a container, deploys the code, and runs a smoke test.",
+      "version": "0.1.0",
+      "category": "infrastructure",
+      "keywords": ["paperos", "deploy", "infrastructure"]
+    }
+  ]
+}

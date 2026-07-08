@@ -1,0 +1,13 @@
+{
+  "name": "paperos-deploy-mcp",
+  "version": "0.1.0",
+  "description": "Deploy applications to PaperOS infrastructure via a single tool call. Bundles the deploy-mcp server, a strict workflow skill, and a /deploy slash command.",
+  "author": {
+    "name": "PaperOS",
+    "email": "devops@paperos.com"
+  },
+  "homepage": "https://github.com/paperos-labs/paperos-plugins/tree/main/deploy",
+  "repository": "https://github.com/paperos-labs/paperos-plugins",
+  "license": "UNLICENSED",
+  "keywords": ["paperos", "deploy", "infrastructure", "mcp"]
+}

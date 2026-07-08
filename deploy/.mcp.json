@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "deploy-mcp": {
+      "type": "http",
+      "url": "https://deploy.onpaper.co/mcp",
+      "title": "paperos-deploy",
+      "description": "Deploy applications to PaperOS infrastructure: provisions an LXC container, deploys the code, and runs a smoke test."
+    }
+  }
+}
