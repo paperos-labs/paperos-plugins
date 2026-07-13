@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "extractor": {
+      "type": "http",
+      "url": "https://extractor.onpaper.co/mcp",
+      "title": "PaperOS Transcript Extractor",
+      "description": "Run the PaperOS Entity Setup workflow with transcript extraction: open the interactive extractor UI, ingest onboarding material (transcripts, notes, documents), and extract questionnaire answers as review-ready drafts."
+    }
+  }
+}

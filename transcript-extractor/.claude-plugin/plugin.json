@@ -1,0 +1,13 @@
+{
+  "name": "paperos-transcript-extractor",
+  "version": "0.1.0",
+  "description": "PaperOS Transcript Extractor for Claude: run the Entity Setup workflow from your onboarding material — drop in a call transcript, notes, or documents and review extracted questionnaire answers in an embedded UI.",
+  "author": {
+    "name": "PaperOS",
+    "email": "jai@paperos.com"
+  },
+  "homepage": "https://github.com/paperos-labs/paperos-plugins/tree/main/transcript-extractor",
+  "repository": "https://github.com/paperos-labs/paperos-plugins",
+  "license": "UNLICENSED",
+  "keywords": ["paperos", "entity", "formation", "extraction", "transcript", "mcp"]
+}

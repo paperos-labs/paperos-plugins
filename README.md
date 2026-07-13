@@ -22,6 +22,7 @@ claude plugin marketplace add paperos-labs/paperos-plugins
 |---|---|---|
 | **paperos-entity-setup** | `paperos-entity-setup@paperos` | Form & manage PaperOS legal entities (LLC, C-Corp, LP, funds) in chat — formation workflow, field predictions, review dashboards, and the PaperOS knowledge bases. |
 | **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy an app to PaperOS infrastructure in one call — provisions a container, deploys, smoke-tests. |
+| **paperos-transcript-extractor** | `paperos-transcript-extractor@paperos` | Run Entity Setup from your onboarding material — drop in a call transcript, notes, or documents and review extracted questionnaire answers in an embedded UI. |
 
 Install from the directory UI (Customize → Plugins → Browse), or in the CLI:
 ```
