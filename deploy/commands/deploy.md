@@ -5,7 +5,9 @@ argument-hint: <repo-url-or-path>
 
 Deploy the repository indicated by the user to PaperOS.
 
-Use the `paperos-deploy-mcp:deploy-app` skill from this plugin. Follow its full workflow:
+Use the `paperos-deploy-mcp:deploy-app` skill from this plugin. For standalone
+database requests, follow its database reference instead of the app workflow below.
+For a new app deployment:
 
 1. Call `list_app_templates` to discover available stacks
 2. Inspect the repo and select a matching template from that list, including frontend or fullstack templates when appropriate
@@ -34,6 +36,12 @@ For existing-app configuration or lifecycle requests, use the skill's management
 reference and the matching tools/dashboard action, not a duplicate deployment.
 `shutdown_container`, `reboot_container`, and `destroy_container` operate on the
 whole container, not only the app process. Do not use them for an app-only restart.
+
+For standalone PostgreSQL requests, use the skill's database reference and
+create_postgres_database, list_postgres_databases, or delete_postgres_database.
+No app/template is required. Only the database name is supplied; credentials are
+generated. Connection strings are secrets. Database deletion requires explicit
+intent and is independent of app/container deletion.
 
 Critical rule (see the `deploy-app` skill for the full list):
 - **NEVER** write, modify, or send a setup script. The server renders the selected template from `template_values`; you supply only the accepted values.
