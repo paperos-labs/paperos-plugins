@@ -1,7 +1,7 @@
 {
   "name": "paperos-core-mcp",
-  "version": "0.1.0",
-  "description": "PaperOS core workspace tools for Claude: reports, documents, signature status, investor lookup, and batch CSV uploads. Bundles an environment-aware MCP connection and four workflow skills.",
+  "version": "0.1.1",
+  "description": "PaperOS core workspace tools for Claude: reports, documents, signature status, investor lookup, and batch CSV uploads. Bundles the staging MCP connection and four workflow skills.",
   "author": {
     "name": "PaperOS",
     "email": "jai@paperos.com"

@@ -35,8 +35,8 @@
     {
       "name": "paperos-core-mcp",
       "source": "./core",
-      "description": "Work with PaperOS workspaces, reports, documents, signature status, investor records, and batch CSV uploads.",
-      "version": "0.1.0",
+      "description": "Work with PaperOS staging workspaces, reports, documents, signature status, investor records, and batch CSV uploads.",
+      "version": "0.1.1",
       "category": "productivity",
       "keywords": ["paperos", "mcp", "reports", "documents", "signatures", "investors", "csv"]
     }

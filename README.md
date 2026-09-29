@@ -23,7 +23,7 @@ claude plugin marketplace add paperos-labs/paperos-plugins
 | **paperos-entity-setup** | `paperos-entity-setup@paperos` | Form & manage PaperOS legal entities (LLC, C-Corp, LP, funds) in chat — formation workflow, field predictions, review dashboards, and the PaperOS knowledge bases. |
 | **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy, redeploy, and manage apps, including GitHub App repository access, health checks, environment variables, SSO, and container lifecycle. |
 | **paperos-transcript-extractor** | `paperos-transcript-extractor@paperos` | Run Entity Setup from your onboarding material — drop in a call transcript, notes, or documents and review extracted questionnaire answers in an embedded UI. |
-| **paperos-core-mcp** | `paperos-core-mcp@paperos` | Query workspaces, reports, documents, signature status, and investor records; submit batch CSV uploads. [Setup and environments](core/README.md). |
+| **paperos-core-mcp** | `paperos-core-mcp@paperos` | Query PaperOS staging workspaces, reports, documents, signature status, and investor records; submit batch CSV uploads. [Setup](core/README.md). |
 
 Install from the directory UI (Customize → Plugins → Discover), or in the CLI:
 ```
@@ -36,9 +36,8 @@ claude plugin install paperos-core-mcp@paperos
 On first use, click **Connect** on the plugin's PaperOS connector and complete
 the one-time sign-in.
 
-The core plugin defaults to production (`https://app.paperos.com/mcp`). For
-staging, demo, or another PaperOS environment, follow its
-[environment setup](core/README.md#environments) before connecting.
+The core plugin connects only to `https://staging.paperos.dev/mcp`.
+See its [setup guide](core/README.md) for sign-in and usage.
 
 ## Layout
 
@@ -47,7 +46,7 @@ staging, demo, or another PaperOS environment, follow its
 entity-setup/                     the paperos-entity-setup plugin (skills + connector pointer)
 deploy/                           the paperos-deploy-mcp plugin (skills + command + connector pointer)
 transcript-extractor/             the paperos-transcript-extractor plugin (skill + connector pointer)
-core/                             the paperos-core-mcp plugin (skills + environment-aware connector pointer)
+core/                             the paperos-core-mcp plugin (skills + staging connector pointer)
 ```
 
 The deploy plugin (`deploy/`) is maintained only here. Its skill, command,

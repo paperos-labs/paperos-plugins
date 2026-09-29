@@ -1,19 +1,18 @@
 ---
 name: paperos-reports
-description: List PaperOS workspaces and reports, retrieve report data for analysis or CSV export, and open the interactive reports viewer. Use for requests about data stored in the connected PaperOS environment.
+description: List PaperOS workspaces and reports, retrieve report data for analysis or CSV export, and open the interactive reports viewer. Use for requests about data stored in PaperOS staging.
 ---
 
 # PaperOS Reports
 
-Use the `paperos-core` connector for the user's intended environment. Discover
-the actual tool names and schemas; clients may prefix the names below. Do not
-substitute a similarly named tool from another connector or silently switch
-between production, staging, and demo.
+Use the `paperos-core` staging connector. Discover the actual tool names and
+schemas; clients may prefix the names below. Do not substitute a similarly
+named tool from another connector.
 
 ## Direct Data
 
-1. Use `list_workspaces` when the workspace is not already identified in this
-   environment. It returns `name`, `account_id`, and `role`. Reuse exact returned
+1. Use `list_workspaces` when the workspace is not already identified in
+   staging. It returns `name`, `account_id`, and `role`. Reuse exact returned
    names; name matching is case-insensitive.
 2. Use `list_reports(workspace)` to discover exact report names and record
    counts. Do not invent a report name or treat an inaccessible workspace as
@@ -55,6 +54,5 @@ Authentication belongs to the connector's sign-in flow. If the server reports
 an expired or missing session, ask the user to reconnect that connector, not
 to paste passwords or tokens into chat. Access is checked by the server.
 
-Name the environment when it could be confused with another connection.
 Base conclusions on the retrieved data, distinguish missing data from zero,
 and include any retrieval errors that limit the answer.

@@ -1,8 +1,8 @@
 # paperos-core-mcp
 
-PaperOS core workspace tools, served by the PaperOS application server at
-`/mcp`. This plugin packages a remote connector and four workflow skills; it
-does not run a second server or copy the PaperOS backend into Claude.
+PaperOS core workspace tools, served at `https://staging.paperos.dev/mcp`.
+This plugin packages a remote connector and four workflow skills; it does
+not run a second server or copy the PaperOS backend into Claude.
 
 ## Install
 
@@ -11,58 +11,26 @@ claude plugin marketplace add paperos-labs/paperos-plugins
 claude plugin install paperos-core-mcp@paperos
 ```
 
-Select the environment below, start Claude Code, then use `/mcp` to connect
-PaperOS Core through the browser sign-in flow. Sign in to the account for that
-environment. No API key, database password, or server `.env` file is needed.
+Start Claude Code, then use `/mcp` to connect PaperOS Core through the browser
+sign-in flow. In Claude web or the Desktop Chat tab, click **Connect** on the
+plugin's PaperOS Core connector. Sign in with your PaperOS staging account.
+No API key, database password, or server `.env` file is needed.
 
 After connecting, ask "List my PaperOS workspaces" for a read-only first check.
 The tools can access only the workspaces available to the signed-in user.
 
-## Environments
+## Connection
 
-The default is **production**. Claude Code expands `PAPEROS_CORE_MCP_URL` in
-the plugin's `.mcp.json`; set it before starting the session. This is a client
-setting, not a change to the server's environment.
+This plugin connects only to `https://staging.paperos.dev/mcp`. There is no
+environment selector or URL override to configure.
 
-| Environment | MCP URL |
-|---|---|
-| Production | `https://app.paperos.com/mcp` |
-| Staging | `https://staging.paperos.dev/mcp` |
-| Demo | `https://demo.paperos.net/mcp` |
-
-```sh
-# Production (also the default when PAPEROS_CORE_MCP_URL is unset)
-PAPEROS_CORE_MCP_URL=https://app.paperos.com/mcp claude
-
-# Staging
-PAPEROS_CORE_MCP_URL=https://staging.paperos.dev/mcp claude
-
-# Demo
-PAPEROS_CORE_MCP_URL=https://demo.paperos.net/mcp claude
-```
-
-For a provisioned development instance, use its actual HTTPS `/mcp` URL.
-The plugin connects to one environment at a time; it never retries a request
-against a different environment. Changing the variable requires a new Claude
-Code session. Check the resolved connection and authenticate as needed using
-`/mcp` before accessing data or submitting an upload. Do not carry workspace
-IDs, document IDs, or credentials from one environment to another.
-
-This URL substitution is a documented
-[Claude Code feature](https://code.claude.com/docs/en/mcp#environment-variable-expansion-in-mcpjson).
-It is not a Claude web/Chat environment selector. In those clients, configure
-a remote connector with the literal URL for the intended environment; do not
-paste the `${...}` expression into a connector URL. If a plugin-provided
-connection points to a different environment, disable that connection for
-the conversation. Keep the plugin's skills enabled. Embedded reports and
-upload interfaces require a client with MCP Apps support; use the direct
-tools in a terminal session without that support.
+Embedded reports and upload interfaces require a client with MCP Apps
+support; use the direct tools in a terminal session without that support.
 
 ## Tools
 
-The connector discovers tool schemas from the chosen server. This inventory
-matches `server` revision `f5e25432c` (2026-09-29); deployments of different
-environments may expose different versions. The connected server's tool
+The connector discovers tool schemas from the staging server. This inventory
+matches `server` revision `f5e25432c` (2026-09-29). The connected server's tool
 list is authoritative.
 
 ### Available to Claude

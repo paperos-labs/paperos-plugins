@@ -5,10 +5,10 @@ description: Find PaperOS workspace documents, retrieve document details and tem
 
 # PaperOS Documents and Signatures
 
-Use the `paperos-core` tools from the intended environment. Clients may prefix
+Use the `paperos-core` staging tools. Clients may prefix
 tool names. Discover their current schemas, and use workspace names and IDs
 from that same connection. Use `list_workspaces` when workspace selection is
-needed. Never switch environments to work around an access failure.
+needed.
 
 ## Find and Retrieve Documents
 

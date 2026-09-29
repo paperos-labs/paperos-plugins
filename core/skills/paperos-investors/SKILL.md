@@ -5,10 +5,9 @@ description: Look up an investor by email across accessible PaperOS workspaces a
 
 # PaperOS Investor Lookup
 
-Use `find_investor` on the `paperos-core` connection for the intended
-environment. Discover the current tool schema; its client-visible name may
-have a prefix. Do not switch to another environment or account to get more
-results without the user's direction.
+Use `find_investor` on the `paperos-core` staging connection. Discover the
+current tool schema; its client-visible name may have a prefix. Do not switch
+accounts to get more results without the user's direction.
 
 1. Obtain the investor's email from the user or the supplied task context.
    Do not guess it from their name.

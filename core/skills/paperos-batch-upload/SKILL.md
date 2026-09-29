@@ -5,11 +5,11 @@ description: Submit a CSV to PaperOS for capital statements, distribution notice
 
 # PaperOS Batch Uploads
 
-Use the `paperos-core` connector for the intended environment. Discover the
+Use the `paperos-core` staging connector. Discover the
 current tool schema; clients may prefix tool names. Uploads write data and
-submit work for processing, so establish the environment, target workspace,
+submit work for processing, so establish the target workspace,
 batch type, and intended file before submission. If the user only asked to
-review a CSV, do not upload it. Do not silently switch environments.
+review a CSV, do not upload it.
 
 ## Direct Submission
 
