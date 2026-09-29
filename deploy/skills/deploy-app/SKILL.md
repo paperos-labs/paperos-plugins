@@ -26,6 +26,8 @@ For standalone PostgreSQL creation, connection strings, or deletion, read
 | `get_stored_app_env(app_name)` | Read stored env vars for this user and app; may return secrets. |
 | `replace_app_env(app_name, env_vars)` | Replace stored env vars and attempt a live push/restart. |
 | `set_app_sso_gate(app_name, enabled)` | Enable or disable an existing app's login gate. |
+| `set_app_domain(run_id, subdomain)` | Attach or re-enable an onpaper.co subdomain on an existing deployment; refresh enabled SSO. |
+| `release_app_domain(run_id)` | Delete the custom domain's DNS records and free the name; preserve the app and SSO on its original URL. |
 | `shutdown_container(run_id)` | Request container shutdown, preserving its disk. |
 | `reboot_container(run_id)` | Request container reboot, not a code redeploy. |
 | `destroy_container(run_id)` | Permanently delete the container; retain deployment history. |
@@ -38,9 +40,8 @@ and management agent. They are not app-process controls. `replace_app_env` can
 restart the app service while applying env; it is not a standalone restart tool.
 
 Use only tools advertised by the connected server. There is no current MCP tool
-for listing deployments, attaching DNS to an existing deployment, reading live SSO
-state or starting a stopped container. The dashboard
-provides deployment browsing, DNS attachment, and SSO state/probes. Do not invent
+for listing deployments, reading live SSO state or starting a stopped container.
+The dashboard provides deployment browsing and SSO state/probes. Do not invent
 `view_deploys`, `setup_database`, or other retired/planned tools.
 
 ## Critical rules (read first)
@@ -263,7 +264,7 @@ application correctness or a successful SSO login from smoke-test alone.
 - Only pass it if the user actually asked for one. Don't auto-pick a name.
 - Must be `[a-z0-9][a-z0-9-]{0,30}[a-z0-9]` (DNS-safe).
 - If the subdomain is taken, the deploy still succeeds (canonical URL works) but the `setup-dns` step shows failed in the dashboard with a clear error.
-- The user can also add a custom domain later from the dashboard's "Add a service" panel — so if you're unsure, deploy without and let them choose post-hoc.
+- The user can add a custom domain later through `set_app_domain` or the dashboard's "Add a service" panel. Release/re-enable use `release_app_domain` / `set_app_domain`; see the management reference.
 
 The returned `live_url` stays canonical; `custom_domain` holds the successful
 alias. Record creation is not proof of DNS/TLS propagation or working browser
@@ -292,9 +293,13 @@ is enabled. SSO failures must be reported as protection not confirmed.
 SSO uses the attached custom domain for its callback when present, otherwise the
 canonical URL. Configure DNS before SSO (the pipeline does this). Stored SSO state
 does not automatically gate a new container: pass `sso=True` for each new protected
-deployment. Later dashboard domain changes refresh an enabled gate automatically;
-PaperOS SSO hostname registration remains separate. Read the management reference
-for domain-update failures or toggles.
+deployment. Later dashboard or MCP domain changes refresh an enabled gate automatically.
+A warning that "The domain ... is not registered, so you'll be redirected to ..."
+requires PaperOS to whitelist the exact hostname in SSO. DNS and OAuth client
+registration do not add it to that whitelist. Do not disable SSO, redeploy, or
+repeatedly toggle the gate to fix that warning; start a fresh login from the app
+URL after PaperOS confirms registration. Read the management reference for
+domain-update failures and server-side diagnostics.
 
 Example when the user requested both DNS and SSO:
 

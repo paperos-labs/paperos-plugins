@@ -88,12 +88,11 @@ blindly retry registration after an uncertain response.
 
 ## Custom DNS
 
-During deployment use `custom_subdomain`; afterward use the dashboard's custom
-domain action. There is no standalone DNS MCP tool. The existing authenticated
-REST route, for clients already authorized to use it, is
-`POST /api/deployments/{run_id}/custom-domain` with `{"subdomain":"weather"}`.
-It returns `custom_domain` and `url`. Knowing the route is not authorization to
-acquire another client's credentials or alter a different deployment.
+During deployment use `custom_subdomain`; afterward use
+`set_app_domain(run_id, subdomain)` or the dashboard's custom domain action.
+The authenticated REST equivalent is `POST /api/deployments/{run_id}/custom-domain`
+with `{"subdomain":"weather"}`. The run must belong to the caller; its latest
+container state is used even when the caller supplies an older run ID.
 
 Only `<prefix>.onpaper.co` is supported. Prefixes are 2-32 lowercase
 alphanumeric/hyphen characters, starting and ending with an alphanumeric.
@@ -101,17 +100,47 @@ An existing record is a conflict, not permission to replace it. Do not advertise
 arbitrary bring-your-own-domain support or automatically choose another name.
 The deploy's `live_url` remains canonical; `custom_domain` is the alias.
 
-SSO registers its callback against the custom domain if present. The dashboard
-domain action automatically refreshes an enabled gate; other hostnames redirect
+SSO registers its callback against the custom domain if present. Both domain
+interfaces automatically refresh an enabled gate; other hostnames redirect
 to that callback host before login so cookies stay on the same hostname.
 If DNS saves but SSO refresh fails, the API returns HTTP 502 with the saved
-`custom_domain`, `url`, and an error. Retry saving that same subdomain in the
-dashboard; it skips DNS creation and retries SSO. Never disable SSO to recover.
+`custom_domain`, `url`, and an error; the MCP error includes the same saved result.
+Retry `set_app_domain` with that same subdomain or save it in the dashboard;
+it skips DNS creation and retries SSO. Never disable SSO to recover.
+
+On explicit user request, `release_app_domain(run_id)` (or REST `DELETE` on the
+same route) switches enabled SSO to the original `tls-*` address before deleting
+DNS. It does not stop the app or disable SSO. A failed SSO switch leaves DNS alone;
+a DNS deletion error is reported, not treated as success. A successful release
+clears `custom_domain` across the container's runs and returns the original `url`.
+`released_domain` remembers the old name for the dashboard, not ownership or a
+reservation. Later container destruction must not delete that released name.
+
+Re-enable with `set_app_domain` using the previous prefix, or another name chosen
+by the user. A name taken by another deployment is a conflict; do not overwrite
+it or choose a replacement name without the user's direction.
+
+## SSO Hostname Whitelist Warning
 
 PaperOS SSO hostname/brand registration is separate from DNS and OAuth client
-registration. A "domain is not registered" sign-in message needs PaperOS to
-register that hostname, not a redeploy or repeated SSO toggles. Start a fresh
-login from the app URL afterward. Existing gates gain canonical-host redirects
+registration. The sign-in page can show this exact example:
+
+> The domain distribution-slice.onpaper.co is not registered, so you'll be redirected to staging.paperos.dev. If you think this is in error, please reach out to support@paperos.com.
+
+Ask PaperOS to whitelist the exact custom hostname in the SSO brand registry.
+DNS creation, OAuth client registration, and releasing/reclaiming DNS do not
+manage that registry. Do not disable SSO, redeploy the app, or repeatedly toggle
+SSO. After registration, start a fresh login from the app URL, not a saved
+callback URL. Gate installation or a healthy app does not prove sign-in works.
+
+Server-side diagnosis: the sign-in frontend checks `/api/public/brand` with
+`brand_domain=<hostname>` against the SSO API. A missing entry returns 404; a
+network/server error can also trigger the frontend's fallback, so verify the
+response before assuming the entry is missing. That fallback rewrites the
+callback to the default brand hostname. A generic 403 is not this diagnosis:
+oauth2-proxy's missing-CSRF-cookie error requires checking that login and callback
+use the same hostname and retrying a fresh flow. Never copy tokens, cookies, or
+authorization codes into reports. Existing gates gain canonical-host redirects
 when reapplied or when their domain is saved. Reapplying registers a new OAuth
 client; it is not a read-only check or proof of a completed login.
 
