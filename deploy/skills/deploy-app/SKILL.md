@@ -19,9 +19,9 @@ For standalone PostgreSQL creation, connection strings, or deletion, read
 |---|---|
 | `list_app_templates()` | Discover supported stacks. |
 | `get_app_template(name)` | Read template content and accepted `keys`. |
-| `create_app_deployment(app_name, repo_url, template_name, template_values, ...)` | Create a new container and deploy the app; optional `env_vars`, `smoke_paths`, `custom_subdomain`, `sso`. |
-| `redeploy_app(run_id)` | Pull, rebuild, restart, and health-check a new-format deployment in the same running container. Returns a new run ID to poll. |
-| `get_deployment_run_status(run_id)` | Read persisted steps, errors, `live_url`, and `custom_domain`. |
+| `create_app_deployment(app_name, repo_url, template_name, template_values, ...)` | Create a new container and deploy the app; optional `branch`, `env_vars`, `smoke_paths`, `custom_subdomain`, `sso`. |
+| `redeploy_app(run_id, branch=None)` | Update the saved branch or explicitly switch branches, rebuild, restart, and health-check in the same running container. Returns a new run ID to poll. |
+| `get_deployment_run_status(run_id)` | Read persisted steps, errors, resolved `branch`, `live_url`, and `custom_domain`. |
 | `get_deployment_run_logs(run_id, step=None)` | Read actual logs for a run or step. |
 | `get_stored_app_env(app_name)` | Read stored env vars for this user and app; may return secrets. |
 | `replace_app_env(app_name, env_vars)` | Replace stored env vars and attempt a live push/restart. |
@@ -223,6 +223,7 @@ create_app_deployment(
     },
     env_vars={"LOG_LEVEL": "info"},
     smoke_paths=["/", "/api/health"],
+    branch="staging",  # Omit to deploy the repository's default branch.
 )
 ```
 
@@ -241,6 +242,14 @@ Each `create_app_deployment` call creates a new container, not an in-place code 
 Repeating it after an ambiguous response can create duplicate infrastructure.
 
 `template_name` is required — the exact name you chose in Step 3 (e.g. `"node"`, `"python-fastapi"`, `"go"`, `"fullstack"`). The dashboard uses it to show the right runtime, and the server uses it to pick the template file to render.
+
+**`branch`** — optional top-level input, outside `template_values`. Pass the user's
+chosen remote branch, such as `staging` or `release/v2`; inspect that branch when
+choosing the template and entry points. Omission uses the repository's default
+branch, which need not be `main`. Do not infer a deployment target from an
+unrelated local checkout. Missing branches, tag-only names, and commit references
+fail without falling back. The resolved branch is recorded in run status and
+deployment details; subsequent redeploys retain it unless explicitly overridden.
 
 **`smoke_paths`** — paths the smoke test probes through the agent's ungated loopback listener and the public URL. Defaults to `["/"]`; override it if your app's root does not return 2xx. For `fullstack`, pass one real health path per half so a dead backend can't hide behind a healthy frontend file_server response:
 - `["/", "/api/"]` for the default `/api/*` routing

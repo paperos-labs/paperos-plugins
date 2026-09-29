@@ -27,10 +27,16 @@ need the paper-deploy GitHub App installed with the repository selected. The ser
 supplies a fresh token for HTTPS clone and pull. For a URL, inspect only
 what is needed to choose the template and env. Do not embed tokens in the URL.
 
+Pass an explicitly requested branch as the top-level `branch` input and inspect
+that branch's code when selecting template values. Omit it to use the repository
+default; do not assume `main`. Missing remote branches fail without fallback.
+
 For an in-place code update, use `redeploy_app(run_id)` on a supported new
 deployment and poll the returned new run ID through health checks. Preserve the
 existing container, env, DNS, and SSO. Old containers are not upgraded; do not
 silently replace them. Redeploy may have downtime and has no automatic rollback.
+Omit `branch` to retain the saved branch, or pass it to switch when requested.
+Branch selection requires a v7+ agent; resolved branches appear in run status.
 
 For existing-app configuration or lifecycle requests, use the skill's management
 reference and the matching tools/dashboard action, not a duplicate deployment.
