@@ -20,7 +20,7 @@
       "name": "paperos-deploy-mcp",
       "source": "./deploy",
       "description": "Deploy, redeploy, and manage applications on PaperOS infrastructure",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "category": "infrastructure",
       "keywords": ["paperos", "deploy", "infrastructure"]
     },

@@ -24,7 +24,7 @@ claude plugin marketplace add paperos-labs/paperos-plugins
 | **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy, redeploy, and manage apps, including GitHub App repository access, health checks, environment variables, SSO, and container lifecycle. |
 | **paperos-transcript-extractor** | `paperos-transcript-extractor@paperos` | Run Entity Setup from your onboarding material — drop in a call transcript, notes, or documents and review extracted questionnaire answers in an embedded UI. |
 
-Install from the directory UI (Customize → Plugins → Browse), or in the CLI:
+Install from the directory UI (Customize → Plugins → Discover), or in the CLI:
 ```
 claude plugin install paperos-entity-setup@paperos
 claude plugin install paperos-deploy-mcp@paperos
@@ -41,11 +41,10 @@ entity-setup/                     the paperos-entity-setup plugin (skills + conn
 deploy/                           the paperos-deploy-mcp plugin (skills + command + connector pointer)
 ```
 
-Each plugin's source of truth lives in its own private PaperOS repo; the
-plugin-only slice is published here for distribution.
+The deploy plugin (`deploy/`) is maintained only here. Its skill, command,
+connector config, and manifest no longer exist in `paperos-labs/deploy-mcp`, so
+make every deploy plugin change in this repository. When the deploy server
+changes tool names, parameters, or behavior, update `deploy/` in the same release.
 
-For deploy releases, synchronize `deploy/skills/` (including references),
-`deploy/commands/`, and `deploy/.mcp.json` from `paperos-labs/deploy-mcp`.
-Keep the plugin version and description aligned in both repositories' plugin
-manifests and marketplace entries; preserve this repository's distribution URLs.
-Updating the server or source repository alone does not update this marketplace copy.
+The other plugins' source of truth lives in their own private PaperOS repos; the
+plugin-only slice is published here for distribution.

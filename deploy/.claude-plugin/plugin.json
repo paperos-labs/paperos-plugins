@@ -1,6 +1,6 @@
 {
   "name": "paperos-deploy-mcp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Deploy, redeploy, and manage applications on PaperOS infrastructure. Bundles a connection to the hosted MCP server, a deployment workflow skill, and the /paperos-deploy-mcp:deploy command.",
   "author": {
     "name": "PaperOS",

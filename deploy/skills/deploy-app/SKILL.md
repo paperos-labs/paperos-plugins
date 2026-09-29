@@ -223,7 +223,7 @@ create_app_deployment(
 The deployed code is cloned from the remote repo, not uploaded from the local
 working tree. Uncommitted/unpushed changes are not included. Use a plain GitHub
 SSH or HTTPS URL without credentials. PaperOS (`paperos-labs`) retains its
-existing access. Other GitHub owners use the Paper Deploy GitHub App: an admin
+existing access. Other GitHub owners use the paper-deploy GitHub App: an admin
 must install it and approve the repository. The server looks up that installation,
 supplies a temporary read-only token over management SSH after agent health,
 and clones over HTTPS. Redeploy gets a fresh token before pulling. Tokens are
