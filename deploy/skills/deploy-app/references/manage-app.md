@@ -146,6 +146,14 @@ Frontend build-time values require `redeploy_app` on a supported deployment. `re
 rewrites env and restarts; it does not rerun frontend builds. Never put secrets
 into browser-exposed env variables.
 
+## PostgreSQL Connections
+
+Databases are independent resources, not entries in the app's Add a service menu.
+Use the [database reference](databases.md) for create/list/delete and the correct
+connection string. Apply a requested connection change through the environment
+workflow above, preserving unrelated values. A new database is empty: creation
+does not migrate an existing provider's data or run the app's schema migrations.
+
 ## Container Lifecycle
 
 Use these only for the user's intended action on the identified deployment:
@@ -173,6 +181,7 @@ destroy_container(run_id="1778174516-weather")
 ```
 
 Permanently deletes the container and on-container data; history is retained.
+Standalone PostgreSQL databases are not deleted; deleting one is a separate explicit action.
 Ensure the user intended deletion of that exact deployment. Never use destroy
 as automatic repair or cleanup after a failure. DNS cleanup is best-effort and
 can fail even when destroy succeeds. Stored env is retained; OAuth client cleanup

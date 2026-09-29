@@ -1,9 +1,10 @@
 ---
-description: Deploy a repository to PaperOS infrastructure
-argument-hint: <repo-url-or-path>
+description: Deploy or manage an app, or manage standalone PostgreSQL databases
+argument-hint: "[app path, repo URL, or request]"
 ---
 
-Deploy the repository indicated by the user to PaperOS.
+Handle the user's app or database request on PaperOS, using the current project
+and session context. With no arguments, use the app in the current project.
 
 Use the `paperos-deploy-mcp:deploy-app` skill from this plugin. For standalone
 database requests, follow its database reference instead of the app workflow below.
@@ -18,7 +19,7 @@ For a new app deployment:
 7. Poll `get_deployment_run_status(run_id)` every 5-10 seconds through every requested step. Top-level `done` is not terminal while any step is `pending` or `running`, including `setup-dns` and `enable-sso`. A top-level `failed`, `stopped`, or `destroyed` run ends polling even if later steps remain pending. Report step changes without asking the user to check or confirm
 8. Return the exact `live_url` and any successful `custom_domain`. Inspect every failed step with `get_deployment_run_logs`, including optional failures on a `done` run. Report DNS failure separately; SSO failure means protection is not confirmed and the app may be public, not a successful protected deployment
 
-Target repo: $ARGUMENTS
+Request: $ARGUMENTS
 
 If `$ARGUMENTS` is a local path, inspect that repo, then deploy using its git remote
 URL. Local uncommitted/unpushed changes are not deployed. Use plain GitHub SSH or

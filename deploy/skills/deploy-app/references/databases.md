@@ -2,6 +2,8 @@
 
 Databases belong to the signed-in user, not to a deployment. No repository,
 template, app linkage, or automatic environment injection is involved.
+Creation returns an empty database; it does not copy data from another provider
+or run the application's schema migrations.
 
 - `create_postgres_database(name)` accepts only a display name (1-63 characters).
   The server generates a unique physical database name, username, and password,
@@ -37,3 +39,6 @@ Never commit it, log it, or place it in browser-exposed env. Multiple apps may
 use the same database. App destruction/redeploy does not delete a database;
 database deletion does not update any app's env automatically. The dashboard
 Databases page provides the same create, list/reveal/copy, and delete operations.
+It is at the connected server's `/dashboard/databases.html`, currently
+`https://deploy.onpaper.co/dashboard/databases.html`. Use the same PaperOS identity
+as the MCP connection; a teammate's databases are not listed automatically.

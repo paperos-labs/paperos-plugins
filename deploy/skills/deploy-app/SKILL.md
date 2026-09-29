@@ -196,6 +196,11 @@ If necessary values are missing, explain what is needed. Do not invent API keys
 or database URLs. No env requirement means no env question. Generate app-local
 secrets only when appropriate for a new app, using a cryptographically secure source.
 
+For a user-requested PaperOS PostgreSQL database, follow the [database reference](references/databases.md)
+to create one or retrieve an existing connection string. Hosted apps use the
+returned private URL; local development uses a compatible public URL. Keep the
+existing database unless a change is requested; creating a database does not migrate data.
+
 Frontend build-time vars (for example `VITE_*`) are baked into the public bundle.
 Never put private secrets in browser-exposed variables. Changing stored env and
 restarting does not rebuild that bundle; use `redeploy_app` on supported deployments.
