@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "paperos",
-  "version": "0.1.0",
-  "description": "PaperOS plugins for Claude — install PaperOS tools (entity formation, transcript extraction, infra deploy, …) directly in Claude chat.",
+  "version": "0.2.0",
+  "description": "PaperOS plugins for Claude: entity formation, transcript extraction, infrastructure deployment, and core workspace tools.",
   "owner": {
     "name": "PaperOS",
     "email": "jai@paperos.com"
@@ -31,6 +31,14 @@
       "version": "0.1.0",
       "category": "productivity",
       "keywords": ["paperos", "entity", "formation", "extraction", "transcript"]
+    },
+    {
+      "name": "paperos-core-mcp",
+      "source": "./core",
+      "description": "Work with PaperOS workspaces, reports, documents, signature status, investor records, and batch CSV uploads.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["paperos", "mcp", "reports", "documents", "signatures", "investors", "csv"]
     }
   ]
 }

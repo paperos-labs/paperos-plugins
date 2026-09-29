@@ -23,15 +23,22 @@ claude plugin marketplace add paperos-labs/paperos-plugins
 | **paperos-entity-setup** | `paperos-entity-setup@paperos` | Form & manage PaperOS legal entities (LLC, C-Corp, LP, funds) in chat — formation workflow, field predictions, review dashboards, and the PaperOS knowledge bases. |
 | **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy, redeploy, and manage apps, including GitHub App repository access, health checks, environment variables, SSO, and container lifecycle. |
 | **paperos-transcript-extractor** | `paperos-transcript-extractor@paperos` | Run Entity Setup from your onboarding material — drop in a call transcript, notes, or documents and review extracted questionnaire answers in an embedded UI. |
+| **paperos-core-mcp** | `paperos-core-mcp@paperos` | Query workspaces, reports, documents, signature status, and investor records; submit batch CSV uploads. [Setup and environments](core/README.md). |
 
 Install from the directory UI (Customize → Plugins → Discover), or in the CLI:
 ```
 claude plugin install paperos-entity-setup@paperos
 claude plugin install paperos-deploy-mcp@paperos
+claude plugin install paperos-transcript-extractor@paperos
+claude plugin install paperos-core-mcp@paperos
 ```
 
 On first use, click **Connect** on the plugin's PaperOS connector and complete
 the one-time sign-in.
+
+The core plugin defaults to production (`https://app.paperos.com/mcp`). For
+staging, demo, or another PaperOS environment, follow its
+[environment setup](core/README.md#environments) before connecting.
 
 ## Layout
 
@@ -39,6 +46,8 @@ the one-time sign-in.
 .claude-plugin/marketplace.json   catalog of the plugins below
 entity-setup/                     the paperos-entity-setup plugin (skills + connector pointer)
 deploy/                           the paperos-deploy-mcp plugin (skills + command + connector pointer)
+transcript-extractor/             the paperos-transcript-extractor plugin (skill + connector pointer)
+core/                             the paperos-core-mcp plugin (skills + environment-aware connector pointer)
 ```
 
 The deploy plugin (`deploy/`) is maintained only here. Its skill, command,
@@ -46,5 +55,11 @@ connector config, and manifest no longer exist in `paperos-labs/deploy-mcp`, so
 make every deploy plugin change in this repository. When the deploy server
 changes tool names, parameters, or behavior, update `deploy/` in the same release.
 
-The other plugins' source of truth lives in their own private PaperOS repos; the
-plugin-only slice is published here for distribution.
+The core plugin (`core/`) is also maintained here. Its tools and embedded
+interfaces run in `paperos-labs/server`; update the plugin's skills and tool
+inventory when those server contracts change. No server code or credentials
+are bundled in the plugin.
+
+The entity-setup and transcript-extractor plugins' source of truth lives in
+their own private PaperOS repos; the plugin-only slice is published here for
+distribution.

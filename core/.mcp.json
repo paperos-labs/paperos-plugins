@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "paperos-core": {
+      "type": "http",
+      "url": "${PAPEROS_CORE_MCP_URL:-https://app.paperos.com/mcp}",
+      "title": "PaperOS Core",
+      "description": "PaperOS workspace reports, documents, signature status, investor lookup, and batch CSV uploads. Defaults to production; set PAPEROS_CORE_MCP_URL before starting Claude Code to select another environment."
+    }
+  }
+}
