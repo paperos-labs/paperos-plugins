@@ -4,7 +4,7 @@
       "type": "http",
       "url": "https://deploy.onpaper.co/mcp",
       "title": "paperos-deploy",
-      "description": "Deploy applications to PaperOS infrastructure: provisions an LXC container, deploys the code, and runs a smoke test."
+      "description": "Deploy and manage applications on PaperOS infrastructure. Create a container for a new app, or redeploy a supported app in place with tracked pull, build, restart, and health-check steps."
     }
   }
 }

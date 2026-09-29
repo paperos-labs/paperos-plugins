@@ -19,8 +19,8 @@
     {
       "name": "paperos-deploy-mcp",
       "source": "./deploy",
-      "description": "Deploy applications to PaperOS infrastructure via a single tool call — provisions a container, deploys the code, and runs a smoke test.",
-      "version": "0.1.0",
+      "description": "Deploy, redeploy, and manage applications on PaperOS infrastructure",
+      "version": "0.2.1",
       "category": "infrastructure",
       "keywords": ["paperos", "deploy", "infrastructure"]
     },

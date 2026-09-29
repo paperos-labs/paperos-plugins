@@ -21,7 +21,7 @@ claude plugin marketplace add paperos-labs/paperos-plugins
 | Plugin | Install | What it does |
 |---|---|---|
 | **paperos-entity-setup** | `paperos-entity-setup@paperos` | Form & manage PaperOS legal entities (LLC, C-Corp, LP, funds) in chat — formation workflow, field predictions, review dashboards, and the PaperOS knowledge bases. |
-| **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy an app to PaperOS infrastructure in one call — provisions a container, deploys, smoke-tests. |
+| **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy, redeploy, and manage apps, including GitHub App repository access, health checks, environment variables, SSO, and container lifecycle. |
 | **paperos-transcript-extractor** | `paperos-transcript-extractor@paperos` | Run Entity Setup from your onboarding material — drop in a call transcript, notes, or documents and review extracted questionnaire answers in an embedded UI. |
 
 Install from the directory UI (Customize → Plugins → Browse), or in the CLI:
@@ -43,3 +43,9 @@ deploy/                           the paperos-deploy-mcp plugin (skills + comman
 
 Each plugin's source of truth lives in its own private PaperOS repo; the
 plugin-only slice is published here for distribution.
+
+For deploy releases, synchronize `deploy/skills/` (including references),
+`deploy/commands/`, and `deploy/.mcp.json` from `paperos-labs/deploy-mcp`.
+Keep the plugin version and description aligned in both repositories' plugin
+manifests and marketplace entries; preserve this repository's distribution URLs.
+Updating the server or source repository alone does not update this marketplace copy.
