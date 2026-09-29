@@ -101,12 +101,19 @@ An existing record is a conflict, not permission to replace it. Do not advertise
 arbitrary bring-your-own-domain support or automatically choose another name.
 The deploy's `live_url` remains canonical; `custom_domain` is the alias.
 
-SSO registers its callback against the custom domain if present. Adding DNS to
-an already gated app does **not** automatically update that callback. After
-attaching the alias, reapply `set_app_sso_gate(app_name, enabled=True)` when authorized
-to update that gate, and verify login at the returned URL. Do not disable SSO
-first. Reapplying registers a new client; it is not a read-only check. Do not
-assume login/cookies are interchangeable across both hostnames.
+SSO registers its callback against the custom domain if present. The dashboard
+domain action automatically refreshes an enabled gate; other hostnames redirect
+to that callback host before login so cookies stay on the same hostname.
+If DNS saves but SSO refresh fails, the API returns HTTP 502 with the saved
+`custom_domain`, `url`, and an error. Retry saving that same subdomain in the
+dashboard; it skips DNS creation and retries SSO. Never disable SSO to recover.
+
+PaperOS SSO hostname/brand registration is separate from DNS and OAuth client
+registration. A "domain is not registered" sign-in message needs PaperOS to
+register that hostname, not a redeploy or repeated SSO toggles. Start a fresh
+login from the app URL afterward. Existing gates gain canonical-host redirects
+when reapplied or when their domain is saved. Reapplying registers a new OAuth
+client; it is not a read-only check or proof of a completed login.
 
 ## Persistent Environment Variables
 

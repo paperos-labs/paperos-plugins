@@ -292,7 +292,9 @@ is enabled. SSO failures must be reported as protection not confirmed.
 SSO uses the attached custom domain for its callback when present, otherwise the
 canonical URL. Configure DNS before SSO (the pipeline does this). Stored SSO state
 does not automatically gate a new container: pass `sso=True` for each new protected
-deployment. Read the management reference for later domain changes or toggles.
+deployment. Later dashboard domain changes refresh an enabled gate automatically;
+PaperOS SSO hostname registration remains separate. Read the management reference
+for domain-update failures or toggles.
 
 Example when the user requested both DNS and SSO:
 
