@@ -23,9 +23,16 @@ Request: $ARGUMENTS
 
 If `$ARGUMENTS` is a local path, inspect that repo, then deploy using its git remote
 URL. Local uncommitted/unpushed changes are not deployed. Use plain GitHub SSH or
-HTTPS URLs without credentials. PaperOS repos retain existing access; other owners
-need the paper-deploy GitHub App installed with the repository selected. The server
-supplies a fresh token for HTTPS clone and pull. For a URL, inspect only
+HTTPS URLs without credentials. Deploy/redeploy require the signed-in PaperOS email
+domain to map to the repository organization. Public repos and PaperOS are not
+exempt; personal-account repos are unsupported. No email-verification flag or
+dashboard GitHub identity connection is required in this release.
+Explain domain/org denials without polling when there is no run ID. A missing
+email claim needs connector reconnection. Partner repos require the paper-deploy
+GitHub App installed with the repo selected; PaperOS retains its existing SSH
+credential. Report clone/pull access errors with redacted logs and ask the admin
+to check the repository URL and credential/App permissions. Do not invent a
+permissions tool or ask for GitHub secrets. For a URL, inspect only
 what is needed to choose the template and env. Do not embed tokens in the URL.
 
 Pass an explicitly requested branch as the top-level `branch` input and inspect
@@ -46,7 +53,8 @@ whole container, not only the app process. Do not use them for an app-only resta
 
 For standalone PostgreSQL requests, use the skill's database reference and
 create_postgres_database, list_postgres_databases, or delete_postgres_database.
-No app/template is required. Only the database name is supplied; credentials are
+No app/template or GitHub connection is required. An approved login-email
+domain is required. Only the database name is supplied; credentials are
 generated. Connection strings are secrets. Database deletion requires explicit
 intent and is independent of app/container deletion.
 

@@ -235,15 +235,31 @@ create_app_deployment(
 
 The deployed code is cloned from the remote repo, not uploaded from the local
 working tree. Uncommitted/unpushed changes are not included. Use a plain GitHub
-SSH or HTTPS URL without credentials. PaperOS (`paperos-labs`) retains its
-existing access. Other GitHub owners use the paper-deploy GitHub App: an admin
-must install it and approve the repository. The server looks up that installation,
-supplies a temporary read-only token over management SSH after agent health,
-and clones over HTTPS. Redeploy gets a fresh token before pulling. Tokens are
-removed and revoked after the agent operation; never ask the user for a key or
-token. No new MCP fields or image updates are needed. This demo shares installed
-repository access among signed-in deploy users; it does not enforce team membership.
-Do not describe it as production tenant isolation. Preparation failure stops the run.
+SSH or HTTPS URL without credentials. Every initial deploy and redeploy requires
+the authenticated PaperOS email domain to map to the requested GitHub organization.
+The server checks this before creating a run; public repos and PaperOS are not
+exempt, and personal-account repos are unsupported. Do not supply an email in the
+payload, require an `email_verified` flag, or ask for a separate verification step.
+
+Explain `email_domain_not_allowed` and `repository_org_not_allowed` as onboarding
+or wrong-account/repository errors. `email_required` means reconnect the connector
+to obtain a token containing the login email. `access_not_configured` needs PaperOS
+attention. Do not poll a denied call without a run ID or bypass the policy.
+GitHub identity linking is not required in this release; do not ask users to
+Connect GitHub in the dashboard or invent a permissions tool.
+
+After authorization, PaperOS keeps its existing SSH clone credential. Partners
+need the paper-deploy GitHub App installed, active, and including the repository.
+The server supplies a temporary repository-scoped read-only App token over
+management SSH after agent health, then clones over HTTPS. Redeploy gets a fresh
+token before pulling. Tokens are removed and revoked afterward.
+For repository-not-found, authentication, or permission errors, read the failed
+stage's logs and ask the org admin to check the URL and App repository selection;
+for PaperOS SSH access, ask PaperOS to check the container's credential.
+Do not mislabel build, network, or missing-branch errors as permissions failures.
+Never ask for GitHub keys, tokens, or passwords. No new payload or image is needed.
+This stage authorizes organizations, not individual GitHub repository membership.
+
 Each `create_app_deployment` call creates a new container, not an in-place code update.
 Repeating it after an ambiguous response can create duplicate infrastructure.
 

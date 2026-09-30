@@ -50,7 +50,14 @@ Redeploy button retains this saved branch. The authenticated REST equivalent is
 body or `{}` keeps the saved branch. Install/build uses the original
 server-rendered recipe and the current on-container `.env`, including build-time
 frontend values. Only the app service restarts, not the container. Env, SSO gate,
-DNS and app data are preserved. PaperOS keeps its existing GitHub credential;
+DNS and app data are preserved.
+
+Before each redeploy, the server checks the authenticated login-email domain
+against the repository organization. Domain/org denials create no new run.
+No email-verification flag or dashboard GitHub identity connection is required.
+Read pull-stage logs for repository/credential failures; do not poll without a run ID.
+
+PaperOS keeps its existing GitHub credential;
 partner deployments obtain a fresh read-only GitHub App token for each pull and
 remove/revoke it afterward. Never supply credentials in the redeploy request.
 

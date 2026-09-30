@@ -1,5 +1,9 @@
 # Standalone PostgreSQL Databases
 
+Creation requires an authenticated login-email domain approved by paper-deploy. It does
+not require a GitHub identity connection, repository, or deployed app. Explain an
+access denial before retrying; database lists and deletion remain owner-scoped.
+
 Databases belong to the signed-in user, not to a deployment. No repository,
 template, app linkage, or automatic environment injection is involved.
 Creation returns an empty database; it does not copy data from another provider

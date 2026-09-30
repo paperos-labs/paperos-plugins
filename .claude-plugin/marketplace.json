@@ -20,7 +20,7 @@
       "name": "paperos-deploy-mcp",
       "source": "./deploy",
       "description": "Deploy and manage applications and standalone PostgreSQL databases on PaperOS infrastructure",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "category": "infrastructure",
       "keywords": ["paperos", "deploy", "infrastructure"]
     },
