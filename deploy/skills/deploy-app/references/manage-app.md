@@ -22,7 +22,13 @@ access its authenticated API.
 redeploy_app(run_id="1778174516-weather")
 ```
 
-For deployments created with the v5 image and a saved deployment recipe. Existing
+To change the deployment's branch when requested:
+
+```python
+redeploy_app(run_id="1778174516-weather", branch="release/v2")
+```
+
+For deployments created with a v5+ agent and a saved deployment recipe. Existing
 containers are not upgraded. The container must already be running; redeploy
 does not boot it or create a replacement. Use only tools the connected server advertises.
 
@@ -32,9 +38,16 @@ returned ID every 5-10 seconds and report step changes without asking the user
 to check. Read failed-step logs. On success return the exact `live_url` and any
 `custom_domain`; a URL in the initial acknowledgment is not proof of completion.
 
-Git pulls the checkout's tracked branch with `--ff-only`; it does not force
-`main`, reset local edits, or discard conflicting changes. Explicit branch
-selection remains a separate planned feature. Install/build uses the original
+Without `branch`, the server keeps the saved branch; older runs without branch
+metadata keep the checkout's tracked branch. An explicit branch requires a v7+
+agent advertising `branch-selection`; unsupported agents fail before pulling.
+Git fetches the exact remote branch, switches without discarding local changes,
+and fast-forwards only. Missing branches and tag-only names fail without fallback.
+The actual checkout branch is saved, including after a successful switch followed
+by a failed build; a refused switch keeps the previous branch. The dashboard's
+Redeploy button retains this saved branch. The authenticated REST equivalent is
+`POST /api/deployments/{run_id}/redeploy` with `{"branch":"release/v2"}`; an empty
+body or `{}` keeps the saved branch. Install/build uses the original
 server-rendered recipe and the current on-container `.env`, including build-time
 frontend values. Only the app service restarts, not the container. Env, SSO gate,
 DNS and app data are preserved. PaperOS keeps its existing GitHub credential;
