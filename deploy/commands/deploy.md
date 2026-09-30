@@ -23,16 +23,16 @@ Request: $ARGUMENTS
 
 If `$ARGUMENTS` is a local path, inspect that repo, then deploy using its git remote
 URL. Local uncommitted/unpushed changes are not deployed. Use plain GitHub SSH or
-HTTPS URLs without credentials. Deploy/redeploy require the signed-in PaperOS email
-domain to map to the repository organization. Public repos and PaperOS are not
-exempt; personal-account repos are unsupported. No email-verification flag or
-dashboard GitHub identity connection is required in this release.
-Explain domain/org denials without polling when there is no run ID. A missing
-email claim needs connector reconnection. Partner repos require the paper-deploy
-GitHub App installed with the repo selected; PaperOS retains its existing SSH
-credential. Report clone/pull access errors with redacted logs and ask the admin
-to check the repository URL and credential/App permissions. Do not invent a
-permissions tool or ask for GitHub secrets. For a URL, inspect only
+HTTPS URLs without credentials. Deploy/redeploy require an approved login email
+domain mapped to the repo's organization, a dashboard-connected GitHub identity with
+repository collaborator access, and the App installed with that repository selected.
+PaperOS and public repos are not exempt; personal-account repos are unsupported.
+On `action_required` / `github_connection_required`, ask the user to Connect GitHub
+in the paper-deploy dashboard, then retry. Do not send GitHub authorization URLs,
+invent a permissions tool, or poll a denied call without a run ID. For approved
+partner repositories the server supplies a fresh token for HTTPS clone and pull.
+PaperOS retains its existing clone credential after the same authorization checks.
+For a URL, inspect only
 what is needed to choose the template and env. Do not embed tokens in the URL.
 
 Pass an explicitly requested branch as the top-level `branch` input and inspect

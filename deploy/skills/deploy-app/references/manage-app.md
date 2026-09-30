@@ -52,10 +52,11 @@ server-rendered recipe and the current on-container `.env`, including build-time
 frontend values. Only the app service restarts, not the container. Env, SSO gate,
 DNS and app data are preserved.
 
-Before each redeploy, the server checks the authenticated login-email domain
-against the repository organization. Domain/org denials create no new run.
-No email-verification flag or dashboard GitHub identity connection is required.
-Read pull-stage logs for repository/credential failures; do not poll without a run ID.
+Before each redeploy, the server checks login-email-domain/org approval, the
+dashboard-linked GitHub identity's current collaborator access, and the App's
+repository selection. Missing identity linking returns `github_connection_required`
+with no run ID: ask the user to Connect GitHub in the dashboard, then retry. Never
+send a GitHub authorization URL through the agent or poll a denied call.
 
 PaperOS keeps its existing GitHub credential;
 partner deployments obtain a fresh read-only GitHub App token for each pull and

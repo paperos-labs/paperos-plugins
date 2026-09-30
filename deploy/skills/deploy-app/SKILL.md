@@ -235,31 +235,28 @@ create_app_deployment(
 
 The deployed code is cloned from the remote repo, not uploaded from the local
 working tree. Uncommitted/unpushed changes are not included. Use a plain GitHub
-SSH or HTTPS URL without credentials. Every initial deploy and redeploy requires
-the authenticated PaperOS email domain to map to the requested GitHub organization.
-The server checks this before creating a run; public repos and PaperOS are not
-exempt, and personal-account repos are unsupported. Do not supply an email in the
-payload, require an `email_verified` flag, or ask for a separate verification step.
+SSH or HTTPS URL without credentials. Every initial deploy and redeploy requires:
+an approved login-email domain mapped to the repository organization,
+a GitHub identity connected in the paper-deploy dashboard with current collaborator
+read access, and an active paper-deploy GitHub App installation including that repo.
+PaperOS and public repos are not exempt; personal-account repos are not supported.
+The server enforces this inside the existing calls, before a run is created.
+For `action_required` / `github_connection_required`, tell the user:
+"GitHub identity verification is required. Connect your GitHub account from the
+paper-deploy dashboard, then retry deployment." Do not send GitHub authorization
+URLs through Claude or poll without a `run_id`. No separate permissions tool exists.
+Explain other denial codes: `email_domain_not_allowed` or `repository_org_not_allowed`
+needs approved onboarding; `email_required` needs an email in the authenticated login token
+(reconnect an old connector); `github_repository_denied` needs access for the linked
+account; `github_repository_unavailable` needs URL/App installation selection checked.
+`access_not_configured` and `github_access_check_failed` need PaperOS attention, not
+new containers or altered templates. Never ask for a GitHub key, token, or password.
 
-Explain `email_domain_not_allowed` and `repository_org_not_allowed` as onboarding
-or wrong-account/repository errors. `email_required` means reconnect the connector
-to obtain a token containing the login email. `access_not_configured` needs PaperOS
-attention. Do not poll a denied call without a run ID or bypass the policy.
-GitHub identity linking is not required in this release; do not ask users to
-Connect GitHub in the dashboard or invent a permissions tool.
-
-After authorization, PaperOS keeps its existing SSH clone credential. Partners
-need the paper-deploy GitHub App installed, active, and including the repository.
-The server supplies a temporary repository-scoped read-only App token over
-management SSH after agent health, then clones over HTTPS. Redeploy gets a fresh
-token before pulling. Tokens are removed and revoked afterward.
-For repository-not-found, authentication, or permission errors, read the failed
-stage's logs and ask the org admin to check the URL and App repository selection;
-for PaperOS SSH access, ask PaperOS to check the container's credential.
-Do not mislabel build, network, or missing-branch errors as permissions failures.
-Never ask for GitHub keys, tokens, or passwords. No new payload or image is needed.
-This stage authorizes organizations, not individual GitHub repository membership.
-
+After authorization, PaperOS keeps its existing clone credential; partners receive
+a temporary repository-scoped read-only App token over management SSH after agent
+health and clone over HTTPS. Redeploy gets a fresh token before pulling. Tokens are
+removed and revoked afterward. No new MCP payload fields or image updates are needed.
+Deployment authorization is not container/network tenant isolation.
 Each `create_app_deployment` call creates a new container, not an in-place code update.
 Repeating it after an ambiguous response can create duplicate infrastructure.
 
