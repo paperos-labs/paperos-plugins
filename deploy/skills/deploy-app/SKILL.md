@@ -13,6 +13,9 @@ Do not create another container just to update code, env vars, SSO, or DNS.
 For standalone PostgreSQL creation, connection strings, or deletion, read
 [Databases](references/databases.md). No app, repository, or template is required.
 
+For making a deployed app read or write PaperOS data through the PaperOS
+Developer API, use the `paperos-api-integration` skill.
+
 ## Tool Map
 
 | Tool | Use |
@@ -34,6 +37,7 @@ For standalone PostgreSQL creation, connection strings, or deletion, read
 | `create_postgres_database(name)` | Create a user-owned PostgreSQL database with generated credentials; return connection strings. |
 | `list_postgres_databases()` | List the caller's database IDs, names, status, and secret connection strings. |
 | `delete_postgres_database(database_id)` | Permanently delete one database and its login, not the shared container. |
+| `get_paperos_api_integration_guide(topic="overview")` | Read-only guide for making the user's app call the PaperOS Developer API (reports, batch uploads, records, DB sync). Used by the `paperos-api-integration` skill. |
 
 The three container tools affect the whole container, including the app, Caddy,
 and management agent. They are not app-process controls. `replace_app_env` can
@@ -241,6 +245,8 @@ a GitHub identity connected in the paper-deploy dashboard with current collabora
 read access, and an active paper-deploy GitHub App installation including that repo.
 PaperOS and public repos are not exempt; personal-account repos are not supported.
 The server enforces this inside the existing calls, before a run is created.
+Use the same PaperOS account in the dashboard and connector. No additional
+`email_verified` flag or caller-supplied email is required.
 For `action_required` / `github_connection_required`, tell the user:
 "GitHub identity verification is required. Connect your GitHub account from the
 paper-deploy dashboard, then retry deployment." Do not send GitHub authorization

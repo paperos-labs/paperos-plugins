@@ -21,7 +21,7 @@ claude plugin marketplace add paperos-labs/paperos-plugins
 | Plugin | Install | What it does |
 |---|---|---|
 | **paperos-entity-setup** | `paperos-entity-setup@paperos` | Form & manage PaperOS legal entities (LLC, C-Corp, LP, funds) in chat — formation workflow, field predictions, review dashboards, and the PaperOS knowledge bases. |
-| **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy, redeploy, and manage apps, including GitHub App access, health checks, environment variables, SSO, and container lifecycle. Create, list, and delete independent PostgreSQL databases. |
+| **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy, redeploy, and manage apps, including GitHub App access, health checks, environment variables, SSO, and container lifecycle. Create, list, and delete independent PostgreSQL databases. Guide your app's integration with the PaperOS Developer API (reports, batch uploads, records, DB sync). |
 | **paperos-transcript-extractor** | `paperos-transcript-extractor@paperos` | Run Entity Setup from your onboarding material — drop in a call transcript, notes, or documents and review extracted questionnaire answers in an embedded UI. |
 | **paperos-core-mcp** | `paperos-core-mcp@paperos` | Query PaperOS staging workspaces, reports, documents, signature status, and investor records; submit batch CSV uploads. [Setup](core/README.md). |
 
@@ -35,6 +35,13 @@ claude plugin install paperos-core-mcp@paperos
 
 On first use, click **Connect** on the plugin's PaperOS connector and complete
 the one-time sign-in.
+
+For app deployment, also open the [paper-deploy dashboard](https://deploy.onpaper.co/dashboard/#github-connection)
+with that same PaperOS account and choose **Connect GitHub**. Each interactive
+deploy/redeploy checks your approved work-email domain, repository organization,
+linked GitHub account's current collaborator access, and the App's repository
+selection. Database-only use does not require a GitHub connection. See the
+[Integration Kit](https://deploy.onpaper.co/integration-kit) for setup and access errors.
 
 The core plugin connects only to `https://staging.paperos.dev/mcp`.
 See its [setup guide](core/README.md) for sign-in and usage.
