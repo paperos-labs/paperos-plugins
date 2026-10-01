@@ -86,6 +86,14 @@ It gates static files and APIs as well as pages; it does not configure a per-app
 membership allowlist or webhook bypass. A successful toggle reports applied
 configuration, not a completed user login.
 
+Behind the gate, every request reaching the app carries `X-Auth-Request-User`,
+`X-Auth-Request-Email`, and the user's PaperOS access token in
+`X-Auth-Request-Access-Token`; client-sent `X-Auth-Request-*` headers are
+stripped. Gates enabled before this forwarding shipped do not send the token
+until `set_app_sso_gate(app_name, enabled=True)` is applied once more (new
+OAuth client; users sign in again). Only do that when the app needs the token,
+e.g. to call the PaperOS Developer API (see the `paperos-api-integration` skill).
+
 ```python
 set_app_sso_gate(app_name="weather", enabled=False)
 ```
