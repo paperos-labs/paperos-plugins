@@ -1,7 +1,7 @@
 {
   "name": "paperos-deploy-mcp",
-  "version": "0.6.0",
-  "description": "Deploy and manage applications and standalone PostgreSQL databases on PaperOS. Bundles the hosted MCP connector, workflow skill, and /paperos-deploy-mcp:deploy command.",
+  "version": "0.7.0",
+  "description": "Deploy and manage applications and standalone PostgreSQL databases on PaperOS. Bundles the hosted MCP connector, the deploy and PaperOS API integration skills, and /paperos-deploy-mcp:deploy command.",
   "author": {
     "name": "PaperOS",
     "email": "devops@paperos.com"
