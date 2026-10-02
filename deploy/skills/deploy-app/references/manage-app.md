@@ -88,12 +88,20 @@ membership allowlist or webhook bypass. A successful toggle reports applied
 configuration, not a completed user login.
 
 Behind the gate, every request reaching the app carries `X-Auth-Request-User`,
-`X-Auth-Request-Email`, and the user's PaperOS access token in
+`X-Auth-Request-Email`, and the user's **OAuth access token** in
 `X-Auth-Request-Access-Token`; client-sent `X-Auth-Request-*` headers are
 stripped. Gates enabled before this forwarding shipped do not send the token
 until `set_app_sso_gate(app_name, enabled=True)` is applied once more (new
 OAuth client; users sign in again). Only do that when the app needs the token,
 e.g. to call the PaperOS Developer API (see the `paperos-api-integration` skill).
+
+This token identifies the user; SSO does not choose a PaperOS workspace or
+integrate the app's code. The backend sends it as Bearer to the selected
+workspace's API URL. PaperOS checks membership and scopes the request internally,
+then returns the requested data. No OAuth-to-ID-token conversion is needed.
+Keep tokens backend-only; do not echo headers to browser JavaScript. Current
+gates strip credential headers from public OAuth endpoint responses, but the
+app must also avoid exposing them in its own responses or logs.
 
 ```python
 set_app_sso_gate(app_name="weather", enabled=False)

@@ -29,6 +29,19 @@ Use only endpoints the guide documents. Do not call `/api/public/*` or
 non-`v1` `/api/*` routes, and do not invent endpoints or fields; when a detail
 is missing, check `docs_url` or ask the user.
 
+### Token flow
+
+The SSO gate forwards the user's **OAuth access token**, not an ID token or an
+already account-scoped PaperOS token. Pass it directly as Bearer to the selected
+workspace's API URL. PaperOS checks membership and obtains the account-scoped
+token internally; a reports request returns reports, not tokens. Do not add an
+OAuth-to-ID-token conversion or a separate account-token call as a prerequisite.
+
+Use public `org_...` IDs from List Orgs. Here org/workspace/account means a
+PaperOS data context, not a GitHub organization. If explicit account-token
+handling is requested, read `auth` for the public exchange response and current
+scoping limitations. Never reuse a token scoped to A for a records URL naming B.
+
 ## Step 2: Inspect the codebase
 
 Before writing code, establish:
@@ -37,7 +50,8 @@ Before writing code, establish:
   handlers, FastAPI, Go net/http, a fullstack `apps/api` + `apps/web` split...).
   Which paths reach the backend (for fullstack deploys, `BACKEND_ROUTES`).
 - Whether the app is deployed behind the paper-deploy SSO gate. The token
-  comes from that gate; without it there is no user token.
+  comes from that gate; without it this gate-supplied token is absent. Enabling
+  SSO does not implement the app's API calls or grant extra workspace access.
 - Database and ORM/migration tool (Prisma, Drizzle, Knex, SQLAlchemy/Alembic,
   Django, sqlc, raw SQL), and how migrations run on deploy. A PaperOS Postgres
   from `create_postgres_database` is a normal Postgres.
@@ -50,6 +64,7 @@ Before writing code, establish:
   `PAPEROS_API_BASE_URL` defaulting to `https://staging.paperos.dev`; token read
   **per request** from the `X-Auth-Request-Access-Token` header and sent as
   `Authorization: Bearer`; errors mapped by the API's `code` field.
+  On failed session renewal, ask for sign-in again rather than looping on reload.
 - App routes the browser calls; they call PaperOS on the server and return only
   what the UI needs.
 - If the app has a database: add sync tables through the app's own migration

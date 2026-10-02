@@ -43,6 +43,13 @@ linked GitHub account's current collaborator access, and the App's repository
 selection. Database-only use does not require a GitHub connection. See the
 [Integration Kit](https://deploy.onpaper.co/integration-kit) for setup and access errors.
 
+To make your app use PaperOS data, use the deploy plugin's
+[`paperos-api-integration` skill](deploy/skills/paperos-api-integration/SKILL.md).
+The SSO gate supplies a user-level OAuth token to the app backend; the API checks
+access to the workspace selected in each request and returns data. Enabling the
+gate alone does not write that integration or grant new workspace permissions.
+This differs from the core plugin, which uses tools to work with data in chat.
+
 The core plugin connects only to `https://staging.paperos.dev/mcp`.
 See its [setup guide](core/README.md) for sign-in and usage.
 
