@@ -241,9 +241,13 @@ The deployed code is cloned from the remote repo, not uploaded from the local
 working tree. Uncommitted/unpushed changes are not included. Use a plain GitHub
 SSH or HTTPS URL without credentials. Every initial deploy and redeploy requires:
 an approved login-email domain mapped to the repository organization,
-a GitHub identity connected in the paper-deploy dashboard with current collaborator
+a GitHub identity connected in the paper-deploy dashboard with current repository
 read access, and an active paper-deploy GitHub App installation including that repo.
+Read access may come through the organization, a team, or an individual grant;
+write access or a separate direct invitation is not required.
 PaperOS and public repos are not exempt; personal-account repos are not supported.
+Public repo read access qualifies without a separate organization membership or
+direct invitation; the email-domain/org and App installation checks still apply.
 The server enforces this inside the existing calls, before a run is created.
 Use the same PaperOS account in the dashboard and connector. No additional
 `email_verified` flag or caller-supplied email is required.

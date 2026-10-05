@@ -25,7 +25,7 @@ If `$ARGUMENTS` is a local path, inspect that repo, then deploy using its git re
 URL. Local uncommitted/unpushed changes are not deployed. Use plain GitHub SSH or
 HTTPS URLs without credentials. Deploy/redeploy require an approved login email
 domain mapped to the repo's organization, a dashboard-connected GitHub identity with
-repository collaborator access, and the App installed with that repository selected.
+repository read access, and the App installed with that repository selected.
 PaperOS and public repos are not exempt; personal-account repos are unsupported.
 On `action_required` / `github_connection_required`, ask the user to Connect GitHub
 in the paper-deploy dashboard, then retry. Do not send GitHub authorization URLs,

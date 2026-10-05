@@ -53,7 +53,7 @@ frontend values. Only the app service restarts, not the container. Env, SSO gate
 DNS and app data are preserved.
 
 Before each redeploy, the server checks login-email-domain/org approval, the
-dashboard-linked GitHub identity's current collaborator access, and the App's
+dashboard-linked GitHub identity's current repository read access, and the App's
 repository selection. Missing identity linking returns `github_connection_required`
 with no run ID: ask the user to Connect GitHub in the dashboard, then retry. Never
 send a GitHub authorization URL through the agent or poll a denied call.
