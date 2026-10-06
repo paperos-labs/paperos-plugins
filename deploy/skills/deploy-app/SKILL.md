@@ -305,7 +305,9 @@ access. Arbitrary bring-your-own-domain support is not implemented.
 **`sso`** — pass `sso=True` when the user requests a PaperOS login gate. It runs
 as `enable-sso`, after smoke-test and any requested DNS setup. Caddy plus
 oauth2-proxy protect the existing serving configuration, and the server registers
-an OAuth client. No auth JavaScript, app-code changes, or caller-supplied OAuth
+an OAuth client for the new deployment. Later toggles retain and reuse its
+credentials when the deployment, issuer, and callback match; see the management
+reference. No auth JavaScript, app-code changes, or caller-supplied OAuth
 secrets are needed. This is separate from authenticating the MCP connection.
 
 SSO supports backend, static, Vite, SPA, and fullstack templates. Frontend/fullstack

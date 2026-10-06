@@ -99,8 +99,9 @@ Before writing code, establish:
 - The gate only forwards the token if it was enabled after token forwarding
   shipped. For an existing gated app that lacks the header, re-apply it once
   with `set_app_sso_gate(app_name, enabled=True)` after telling the user that
-  it registers a new OAuth client and users sign in again. Do not toggle it
-  off and on.
+  legacy gates without saved credentials receive a new client and cookie
+  secret on that first update and may require a fresh sign-in. Matching saved
+  configurations reuse their credentials. Do not toggle it off and on.
 - Set new env vars with `get_stored_app_env` then `replace_app_env` (full map),
   then ship code with `redeploy_app` per the `deploy-app` skill.
 - Work through `get_paperos_api_integration_guide(topic="checklist")` and report

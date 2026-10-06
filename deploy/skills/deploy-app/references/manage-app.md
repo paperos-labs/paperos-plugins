@@ -75,7 +75,8 @@ explicitly authorized replacement, not an automatic image or agent upgrade.
 set_app_sso_gate(app_name="weather", enabled=True)
 ```
 
-Enabling registers an OAuth client and pushes a Caddy/oauth2-proxy gate to the
+Enabling reuses saved credentials for the same deployment, issuer, and callback
+or registers a new OAuth client, then pushes a Caddy/oauth2-proxy gate to the
 latest live container. Success returns `enabled=True`, `client_id`, and `url`.
 Use that returned URL. Backend, frontend, and fullstack apps are supported when
 the necessary serving config exists. An older frontend/fullstack deployment
@@ -91,8 +92,9 @@ Behind the gate, every request reaching the app carries `X-Auth-Request-User`,
 `X-Auth-Request-Email`, and the user's **OAuth access token** in
 `X-Auth-Request-Access-Token`; client-sent `X-Auth-Request-*` headers are
 stripped. Gates enabled before this forwarding shipped do not send the token
-until `set_app_sso_gate(app_name, enabled=True)` is applied once more (new
-OAuth client; users sign in again). Only do that when the app needs the token,
+until `set_app_sso_gate(app_name, enabled=True)` is applied once more. Legacy
+gates without saved credentials get a new client and cookie secret on that
+first update; users may need to sign in again. Only do that when the app needs the token,
 e.g. to call the PaperOS Developer API (see the `paperos-api-integration` skill).
 
 This token identifies the user; SSO does not choose a PaperOS workspace or
@@ -109,14 +111,21 @@ set_app_sso_gate(app_name="weather", enabled=False)
 
 Disabling removes the gate and makes the app public. Only do this when that
 access change is intended by the user, never just to pass a test. It returns
-`enabled=False`. With no live container it can merely clear stored state; do not
+`enabled=False` and retains saved credentials for the next enable. With no live
+container it can merely mark stored state disabled; do not
 claim to have tested an app that is down.
 
 There is no MCP `get_app_sso` tool. `get_deployment_run_status` shows the original run's
 steps, not the current gate after later toggles. Do not repeatedly enable SSO to
-poll: each enable registers a new OAuth client. The dashboard reads stored state
+poll: each enable applies configuration and restarts the gate. The dashboard reads stored state
 and polls a live `gate-status` probe (`gated`, `open`, `down`) through transient
 restarts. That probe still does not exercise the full login flow.
+
+Matching saved configurations reuse the client and cookie secret while applying
+the current gate configuration. A changed deployment, issuer, or callback needs
+new credentials. Older gates acquire reusable credentials on their next explicit
+enable; existing gates are not automatically updated. A failed agent apply can
+retry the saved registration, but success still requires the gate to be applied.
 
 Stored SSO state is not automatically applied to a fresh deployment; use
 `sso=True` for new protected deployments. OAuth clients are not currently
@@ -178,8 +187,8 @@ callback to the default brand hostname. A generic 403 is not this diagnosis:
 oauth2-proxy's missing-CSRF-cookie error requires checking that login and callback
 use the same hostname and retrying a fresh flow. Never copy tokens, cookies, or
 authorization codes into reports. Existing gates gain canonical-host redirects
-when reapplied or when their domain is saved. Reapplying registers a new OAuth
-client; it is not a read-only check or proof of a completed login.
+when reapplied or when their domain is saved. Reapplying is a mutation, even
+when credentials are reused; it is not proof of a completed login.
 
 ## Persistent Environment Variables
 
