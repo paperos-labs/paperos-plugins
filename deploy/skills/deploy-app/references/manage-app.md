@@ -85,10 +85,10 @@ creating a replacement container.
 
 The wrapper authenticates visitors with PaperOS without modifying app code.
 It gates static files and APIs as well as pages; it does not configure a per-app
-membership allowlist or webhook bypass. A successful toggle reports applied
+membership allowlist or anonymous webhook bypass. A successful toggle reports applied
 configuration, not a completed user login.
 
-Behind the gate, every request reaching the app carries `X-Auth-Request-User`,
+Behind the gate, browser-authenticated requests carry `X-Auth-Request-User`,
 `X-Auth-Request-Email`, and the user's **OAuth access token** in
 `X-Auth-Request-Access-Token`; client-sent `X-Auth-Request-*` headers are
 stripped. Gates enabled before this forwarding shipped do not send the token
@@ -131,6 +131,33 @@ Stored SSO state is not automatically applied to a fresh deployment; use
 `sso=True` for new protected deployments. OAuth clients are not currently
 deregistered on disable/destroy. Do not promise complete client cleanup or
 blindly retry registration after an uncertain response.
+
+## App API keys for jobs and imports
+
+The deployment owner can create one **App API key** on its dashboard detail
+page after enabling SSO. The key is shown once; store it in the calling job's
+secret store. Send `Authorization: Bearer <key>` to that app over HTTPS, not
+in a URL. There is no MCP key-management tool. Never ask for the key in chat or
+put it in frontend code, Git, logs, or a deployment-token field.
+
+The key admits all app endpoints and HTTP methods through the gate, without
+endpoint scopes or automatic expiry. It does not grant access to another app,
+the MCP server, redeploy endpoints, or PaperOS data. No user identity or OAuth
+token is supplied to the app; its own authorization still applies. In particular,
+it cannot replace a user's token for the PaperOS Developer API. The separate
+GitHub Actions token authorizes redeployment, not requests to the app.
+
+Revoke from the same dashboard; this immediately blocks subsequent key checks,
+without changing browser sign-in. Redeploys keep the key, while destroying the
+deployment invalidates it. Replacements need their own keys. Disabling SSO
+makes the app public; it retains the key for re-enable rather than revoking it.
+Creating a key reapplies the gate using existing saved credentials; legacy
+gates without saved credentials may require visitors to sign in again.
+
+An invalid/revoked app key returns 401. A verification outage returns 503 or
+proxy 502, not access or a browser redirect. Machine verification depends on
+deploy-mcp; browser SSO does not. Retry read-only calls as appropriate, but do
+not blindly retry an import/write after a timeout with an unknown outcome.
 
 ## Custom DNS
 

@@ -81,6 +81,9 @@ Before writing code, establish:
 - **Never ask for passwords or tokens in chat**, and never tell the user to paste
   one into code or `.env`. The SSO gate supplies the token; if it is missing,
   explain the gate requirement instead.
+- **App API keys are not PaperOS user tokens.** They let jobs through the app's
+  gate without a browser session but supply no `X-Auth-Request-Access-Token`.
+  Do not send them to the Developer API or treat them as a workspace grant.
 - **Batch uploads are not idempotent.** Always dry-run (`dry_run=true`) first,
   get the user's confirmation, POST once, and never auto-retry a batch POST
   (no retry wrappers, queue redelivery, or loops). On a timeout or 5xx, record
@@ -97,7 +100,7 @@ Before writing code, establish:
 ## Step 4: Gate, deploy, verify
 
 - The gate only forwards the token if it was enabled after token forwarding
-  shipped. For an existing gated app that lacks the header, re-apply it once
+  shipped. For a browser-authenticated request that lacks the header, re-apply it once
   with `set_app_sso_gate(app_name, enabled=True)` after telling the user that
   legacy gates without saved credentials receive a new client and cookie
   secret on that first update and may require a fresh sign-in. Matching saved

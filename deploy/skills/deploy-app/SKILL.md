@@ -315,8 +315,13 @@ apps need serving config captured at deployment; older apps without that capture
 need a replacement deployment, not `redeploy_app`. The v5 agent fixes the frontend
 Caddy service-name mismatch; old containers are not automatically upgraded.
 Older backend apps have a backend fallback. The wrapper
-requires PaperOS authentication, not a per-app user/team allowlist. It gates APIs
-and webhooks too; do not promise anonymous exceptions or non-interactive access.
+requires PaperOS authentication or an owner-issued App API key, not a per-app
+user/team allowlist. It gates APIs and webhooks too; do not promise anonymous
+exceptions. For jobs/imports, the owner can create one app-wide key on the
+deployment dashboard and send it as `Authorization: Bearer <key>`. All app
+endpoints/methods are allowed through the gate; no PaperOS user/workspace token
+is supplied, and the app's own authorization still applies. Key management is
+dashboard-only. See the management reference; never request the key in chat.
 
 **Security limitation:** SSO is a soft, post-deploy step. The app is initially
 reachable before gating, and an error may leave it public or partially configured.
