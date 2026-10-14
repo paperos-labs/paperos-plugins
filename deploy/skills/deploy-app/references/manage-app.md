@@ -134,9 +134,13 @@ blindly retry registration after an uncertain response.
 
 ## App API keys for jobs and imports
 
-The deployment owner can create one **App API key** on its dashboard detail
-page after enabling SSO. The key is shown once; store it in the calling job's
-secret store. Send `Authorization: Bearer <key>` to that app over HTTPS, not
+The deployment owner can create multiple named **App API keys** on its dashboard
+detail page after enabling SSO. Name each for its caller, such as "Nightly imports"
+or "Export service". Each secret is shown once; store it in the calling job's
+secret store. The eye button only shows/hides the current one-time secret. Done
+clears it without revocation; the key's name, creation date and Active status
+remain visible after Done or reload. Lost secrets cannot be retrieved: revoke
+that key and create a replacement. Send `Authorization: Bearer <key>` over HTTPS, not
 in a URL. There is no MCP key-management tool. Never ask for the key in chat or
 put it in frontend code, Git, logs, or a deployment-token field.
 
@@ -147,10 +151,11 @@ token is supplied to the app; its own authorization still applies. In particular
 it cannot replace a user's token for the PaperOS Developer API. The separate
 GitHub Actions token authorizes redeployment, not requests to the app.
 
-Revoke from the same dashboard; this immediately blocks subsequent key checks,
-without changing browser sign-in. Redeploys keep the key, while destroying the
-deployment invalidates it. Replacements need their own keys. Disabling SSO
-makes the app public; it retains the key for re-enable rather than revoking it.
+Revoke a specific key from the same dashboard; this immediately blocks subsequent
+checks for that key, without affecting other keys or browser sign-in. Redeploys
+keep the keys, while destroying the deployment invalidates them. Replacement
+deployments need their own keys. Disabling SSO makes the app public; it retains
+the keys for re-enable rather than revoking them.
 Creating a key reapplies the gate using existing saved credentials; legacy
 gates without saved credentials may require visitors to sign in again.
 
