@@ -60,15 +60,17 @@ server. Registration requires actual HTTPS redirect URLs. List returns metadata;
 register/get return credentials that must stay in server-side secret configuration.
 Reconcile an uncertain registration with list/get instead of automatically creating again.
 
-The source also documents `request_paperos_integration_setup`,
+The plugin also documents `request_paperos_integration_setup`,
 `get_paperos_integration_setup_status`, `list_paperos_integration_users`,
 `create_paperos_integration_user`, and `get_paperos_integration_workspace_token`.
-These additions are pending release and bring the server's source inventory to
-27 tools. They reuse app credentials and existing PaperOS checks. Admin setup
+The toolkit was deployed on October 30, 2026; the server provides 27 tools.
+It reuses app credentials and existing PaperOS checks. Admin setup
 remains manual; the optional dashboard offers registration, setup/status, and
 linked-user JSON export. The guide documents the outstanding upstream
 client-secret verification/disclosure issue and token compatibility limits.
 Registration or a completed setup ticket alone does not prove data calls work.
+Customer account/token/data operations and real setup completion remain
+unverified end to end.
 This differs from the core plugin, which uses tools to work with data in chat.
 
 The core plugin connects only to `https://staging.paperos.dev/mcp`.

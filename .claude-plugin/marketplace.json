@@ -20,7 +20,7 @@
       "name": "paperos-deploy-mcp",
       "source": "./deploy",
       "description": "Deploy applications, manage PostgreSQL databases, and set up PaperOS partner integrations with registration, setup tickets, linked accounts, and workspace tokens regardless of hosting or app login",
-      "version": "0.9.0",
+      "version": "0.9.1",
       "category": "infrastructure",
       "keywords": ["paperos", "deploy", "infrastructure"]
     },

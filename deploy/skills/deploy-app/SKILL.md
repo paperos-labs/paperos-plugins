@@ -54,7 +54,8 @@ and management agent. They are not app-process controls. `replace_app_env` can
 restart the app service while applying env; it is not a standalone restart tool.
 
 Use only tools advertised by the connected server; integration tools require
-the matching server release. The new integration workflow is pending release.
+the matching server release. The integration toolkit was deployed on October 30, 2026;
+the partner guide documents the remaining upstream limits and verification gaps.
 There is no current MCP tool
 for listing deployments, reading live SSO state or starting a stopped container.
 The dashboard provides deployment browsing and SSO state/probes. Do not invent

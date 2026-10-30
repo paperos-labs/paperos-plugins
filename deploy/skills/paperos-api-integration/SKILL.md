@@ -29,8 +29,8 @@ read the topics the request needs:
 | Before reporting done | `get_paperos_api_integration_guide(topic="checklist")` |
 
 Use only tools advertised by the connected server and topics listed by the guide.
-The source guidance describes the complete integration toolset, pending release;
-an older server may not expose it yet. Updating the plugin does not deploy the server.
+The integration toolkit was deployed on October 30, 2026; an older server may
+not expose it. Updating the plugin does not deploy the server.
 If a required tool or topic is absent, report the server/plugin version mismatch.
 Use documented endpoints on their documented service: PaperOS `/api/v1/*` data
 and registration routes differ from deploy's setup-request REST API. Do not
@@ -61,13 +61,12 @@ elsewhere, read `partner-integration` and use this registration workflow:
    reconcile the outcome; do not automatically repeat registration.
 
 For an interactive workflow, the connected deploy server's **Partner integrations**
-page is `/dashboard/integrations.html` once released. It uses the developer's
+page is `/dashboard/integrations.html`. It uses the developer's
 PaperOS sign-in to choose a workspace, reuse or register an app, and reveal/copy
 credentials. It also requests admin setup, manually refreshes ticket status, and
 optionally shows linked users and exports `{"client_id":"oidc_...","subjects":[...]}`
 as JSON. The app secret stays in page memory, outside the export and browser
-storage. The page and new
-tools are pending release. The page is optional; MCP needs no browser.
+storage. The page is optional; MCP needs no browser.
 
 New registrations start with `requestable_scopes: ["profile"]`. Registration
 alone does not enable impersonation, link customers, or grant workspace data access.
@@ -121,9 +120,11 @@ Customer creation/listing and token issuance use the existing PaperOS
 `/api/v1/integrations/*` endpoints documented in the guide. No customer Supabase
 token exchange or PaperOS connection screen is required.
 
-Read `partner-integration` for the pending release status, unresolved upstream
+Read `partner-integration` for the release verification limits, unresolved upstream
 client-secret verification/disclosure issue, and token compatibility limits.
 Registration or ticket completion does not prove the data integration works.
+The deployment checks did not exercise real setup completion or customer
+account creation, workspace-token issuance, or data calls.
 
 ## SSO gate token flow
 

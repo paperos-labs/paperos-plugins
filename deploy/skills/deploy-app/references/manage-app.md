@@ -24,7 +24,7 @@ access its authenticated API.
 
 The optional **Partner integrations** page at `/dashboard/integrations.html`
 covers registration, credential recovery, setup requests/status, and optional
-linked-user JSON export once released. It uses the developer's PaperOS workspace
+linked-user JSON export. It uses the developer's PaperOS workspace
 for registration and the selected app's credentials for subsequent steps, not a
 deployment ID. Admin setup remains manual. Agents use the tools in the
 `paperos-api-integration` skill without opening the dashboard.
