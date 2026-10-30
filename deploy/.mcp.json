@@ -4,7 +4,7 @@
       "type": "http",
       "url": "https://deploy.onpaper.co/mcp",
       "title": "paperos-deploy",
-      "description": "Deploy and manage applications and PostgreSQL databases on PaperOS. Register partner integrations and recover their credentials under a PaperOS workspace, without requiring an app deployment or SSO gate. Read guides for integrating PaperOS data into the app."
+      "description": "Deploy and manage applications and PostgreSQL databases on PaperOS. Set up partner integrations with registration, credentials, manual setup tickets, linked accounts, and workspace-token tools, without requiring an app deployment or SSO gate. Read guides for integrating PaperOS data into the app; new tools require the matching server release."
     }
   }
 }

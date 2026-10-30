@@ -1,7 +1,7 @@
 {
   "name": "paperos-deploy-mcp",
   "version": "0.9.0",
-  "description": "Deploy apps, manage PostgreSQL databases, and register PaperOS partner integrations with or without a deployment. Bundles the hosted MCP connector, deployment and API integration skills, and /paperos-deploy-mcp:deploy command.",
+  "description": "Deploy apps, manage PostgreSQL databases, and set up PaperOS partner integrations: registration, manual setup tickets, linked accounts, and workspace tokens. Bundles the hosted MCP connector, deployment and API integration skills, and /paperos-deploy-mcp:deploy command.",
   "author": {
     "name": "PaperOS",
     "email": "devops@paperos.com"

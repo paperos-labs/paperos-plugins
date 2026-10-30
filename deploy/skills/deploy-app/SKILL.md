@@ -13,9 +13,9 @@ Do not create another container just to update code, env vars, SSO, or DNS.
 For standalone PostgreSQL creation, connection strings, or deletion, read
 [Databases](references/databases.md). No app, repository, or template is required.
 
-For registering a partner application, recovering its credentials, or making
-an app use PaperOS data, use the `paperos-api-integration` skill. No deployment
-or SSO gate is required for registration.
+For partner registration, credentials, setup tickets, linked accounts, workspace
+tokens, or making an app use PaperOS data, use the `paperos-api-integration`
+skill. This workflow requires no deployment or SSO gate.
 
 ## Tool Map
 
@@ -43,13 +43,19 @@ or SSO gate is required for registration.
 | `list_paperos_integrations(owner_org_id)` | List visible registrations in the owning PaperOS workspace; metadata only. |
 | `get_paperos_integration(owner_org_id, client_id)` | Read an existing registration and recover its credentials; output contains secrets. |
 | `register_paperos_integration(owner_org_id, client_name, redirect_uris, contacts=None, client_uri=None)` | Register an app under a PaperOS workspace and return client credentials; requires actual HTTPS redirect URLs. |
+| `request_paperos_integration_setup(client_id, client_secret)` | Create/reuse the app's manual admin setup ticket; does not perform setup. |
+| `get_paperos_integration_setup_status(client_id, client_secret)` | Read the ticket's processing/completed status; completion does not grant permissions. |
+| `list_paperos_integration_users(client_id, client_secret)` | List linked subjects and accessible workspaces; returns customer data. |
+| `create_paperos_integration_user(client_id, client_secret, external_id, email, locale, zoneinfo, given_name=None, family_name=None, email_verified=None)` | Create a new linked PaperOS account with real details; existing emails are rejected, no workspace is created. |
+| `get_paperos_integration_workspace_token(client_id, client_secret, org_id, auth_time, exp, amr, sub=None, external_id=None)` | Issue a workspace token for exactly one linked subject selector using the app's actual authentication claims; output is secret. |
 
 The three container tools affect the whole container, including the app, Caddy,
 and management agent. They are not app-process controls. `replace_app_env` can
 restart the app service while applying env; it is not a standalone restart tool.
 
-Use only tools advertised by the connected server; registration tools require
-the matching server release. There is no current MCP tool
+Use only tools advertised by the connected server; integration tools require
+the matching server release. The new integration workflow is pending release.
+There is no current MCP tool
 for listing deployments, reading live SSO state or starting a stopped container.
 The dashboard provides deployment browsing and SSO state/probes. Do not invent
 `view_deploys`, `setup_database`, or other retired/planned tools.
@@ -57,7 +63,7 @@ The dashboard provides deployment browsing and SSO state/probes. Do not invent
 ## Critical rules (read first)
 
 1. **You never write or send a setup script.** You pick a template name and supply a `template_values` dict. The server renders and runs it.
-2. **Before creating a deployment, call `list_app_templates` first** to discover available stacks. Database operations and integration registration do not use app templates.
+2. **Before creating a deployment, call `list_app_templates` first** to discover available stacks. Database and integration operations do not use app templates.
 3. **ALWAYS call `get_app_template(name)`** before deploying — it returns the template content (read it to understand each value's purpose) and a `keys` list of what `template_values` can contain.
 4. **Only the keys in the `keys` list (and nothing else)** belong in `template_values`. Unknown keys are rejected server-side.
 5. **APP_NAME is automatic** — you pass it as the top-level `app_name` param to `create_app_deployment`. Don't also put it in `template_values`.

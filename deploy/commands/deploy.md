@@ -1,14 +1,16 @@
 ---
-description: Deploy or manage an app, manage standalone PostgreSQL databases, or register a PaperOS integration
+description: Deploy or manage an app, manage standalone PostgreSQL databases, or set up a PaperOS integration
 argument-hint: "[app path, repo URL, or request]"
 ---
 
 Handle the user's app, database, or integration request on PaperOS, using the current project
 and session context. With no arguments, use the app in the current project.
 
-For PaperOS integration registration, credential recovery, or app API integration,
-use this plugin's `paperos-api-integration` skill. Registration does not require
-a deployment or SSO gate; do not enter the deployment workflow for that request.
+For PaperOS registration, setup tickets, linked accounts, workspace tokens, or
+app API integration, use this plugin's `paperos-api-integration` skill. It does
+not require a deployment or SSO gate; do not enter the deployment workflow for
+that request. Use the connected server's available tools and report manual admin
+setup as pending until its status changes; ticket completion alone is not a data test.
 
 For infrastructure work, use the `paperos-deploy-mcp:deploy-app` skill. For standalone
 database requests, follow its database reference instead of the app workflow below.

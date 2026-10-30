@@ -1,11 +1,11 @@
 ---
 name: paperos-api-integration
-description: Register a partner application with PaperOS or integrate PaperOS data into the user's own app, with or without the PaperOS SSO gate and regardless of hosting. Use for app registration, credential recovery, reports, batch uploads, records, documents, or database sync. Not for reading or uploading PaperOS data directly in this chat.
+description: Set up a partner application's PaperOS integration or add PaperOS data to the user's own app, with or without the PaperOS SSO gate and regardless of hosting. Use for registration, setup tickets, linked accounts, workspace tokens, reports, batch uploads, records, documents, or database sync. Not for general PaperOS data work in chat.
 ---
 
 # Integrate the PaperOS Developer API into the user's app
 
-This skill handles partner registration through the deploy MCP tools and changes
+This skill handles partner setup through the deploy MCP tools and changes
 the **user's app code** to call PaperOS from its backend. Registration management
 uses the developer's existing MCP login; the partner app authenticates its setup
 and token requests with its client ID and secret. These are separate from
@@ -20,7 +20,7 @@ read the topics the request needs:
 
 | Need | Topic |
 |---|---|
-| App without the PaperOS gate, registration, credential recovery, setup requests | `get_paperos_api_integration_guide(topic="partner-integration")` |
+| App without the PaperOS gate: registration, setup/status, linked accounts, workspace tokens | `get_paperos_api_integration_guide(topic="partner-integration")` |
 | SSO gate token handling and Developer API limitations | `get_paperos_api_integration_guide(topic="auth")` |
 | Report data | `get_paperos_api_integration_guide(topic="reports")` |
 | Statement / CSV batch uploads | `get_paperos_api_integration_guide(topic="batch-uploads")` |
@@ -29,7 +29,8 @@ read the topics the request needs:
 | Before reporting done | `get_paperos_api_integration_guide(topic="checklist")` |
 
 Use only tools advertised by the connected server and topics listed by the guide.
-Plugin 0.9.0 describes registration tools; an older server may not expose them yet.
+The source guidance describes the complete integration toolset, pending release;
+an older server may not expose it yet. Updating the plugin does not deploy the server.
 If a required tool or topic is absent, report the server/plugin version mismatch.
 Use documented endpoints on their documented service: PaperOS `/api/v1/*` data
 and registration routes differ from deploy's setup-request REST API. Do not
@@ -59,26 +60,70 @@ elsewhere, read `partner-integration` and use this registration workflow:
    After a timeout or unclear create result, list and get the registration to
    reconcile the outcome; do not automatically repeat registration.
 
-For manual registration, the connected deploy server's **Partner integrations**
+For an interactive workflow, the connected deploy server's **Partner integrations**
 page is `/dashboard/integrations.html` once released. It uses the developer's
 PaperOS sign-in to choose a workspace, reuse or register an app, and reveal/copy
-credentials. The page is optional; the MCP workflow above needs no browser.
-Dashboard registration is pending release and does not yet include setup-request
-or ticket-status controls.
+credentials. It also requests admin setup, manually refreshes ticket status, and
+optionally shows linked users and exports `{"client_id":"oidc_...","subjects":[...]}`
+as JSON. The app secret stays in page memory, outside the export and browser
+storage. The page and new
+tools are pending release. The page is optional; MCP needs no browser.
 
 New registrations start with `requestable_scopes: ["profile"]`. Registration
 alone does not enable impersonation, link customers, or grant workspace data access.
 Customer access still requires the app-to-user link and that user's workspace
 membership; registration ownership does not select the customer's target workspace.
 
-The setup request/status step is REST-only in this release:
-`POST` and `GET /api/integrations/setup-request` on the deploy service use the
-app's HTTP Basic client ID/secret, with no extra developer login. POST accepts
-an empty body or `{}`. It creates/reuses an admin ticket, not the actual admin
-setup. There is no setup-request MCP tool. Read `partner-integration` for the
-deployment status and the outstanding upstream client-secret validation issue;
-do not claim this step is safely exposed or the entire data integration works
-from successful registration or ticket completion alone.
+## Partner setup and customer operations
+
+After registration, use the app's returned credentials for these tools. Keep
+secrets in authorized backend configuration and tool calls, not visible chat.
+The connected developer session does not replace the app's credentials or the
+customer's authentication context.
+
+1. Call `request_paperos_integration_setup(client_id, client_secret)` to create
+   or reuse its admin ticket. Use
+   `get_paperos_integration_setup_status(client_id, client_secret)` to check it,
+   including after an uncertain request. Both return `ticket_id`, `ticket_number`,
+   `client_id`, `status`, `ticket_status`, `created_at`, and `closed_at`.
+   The admin performs setup manually. Closing the ticket reports `completed`;
+   reopening reports `processing`. Neither action runs setup or grants permissions.
+   Report a pending admin step as pending; do not claim it is finished.
+2. Call `list_paperos_integration_users(client_id, client_secret)` to find
+   linked accounts. It returns `success`, `type`, and `subjects`, each with
+   email, `sub`, optional `external_id`, grants, and `orgs` containing workspace
+   IDs/names. Match the known email and choose the intended public `org_...` ID.
+   There is no server-side email filter. Listing creates no links; knowing an
+   email is not access. Export customer payloads only where the task needs them.
+3. When a **new** account is requested, use
+   `create_paperos_integration_user(client_id, client_secret, external_id, email, locale, zoneinfo, given_name=None, family_name=None, email_verified=None)`.
+   Use actual account details; do not create invented sample users. Assert
+   `email_verified=true` only if the partner verified the email. The existing
+   API requires impersonation and returns `success`, `type`, and `subject`,
+   including `subject.sub` and initially empty `orgs`. It does not create a
+   workspace. Existing emails are rejected, not automatically claimed or linked.
+   Existing-user linking remains the current admin procedure. Reconcile an
+   uncertain creation with the linked-user list before retrying.
+4. For a requested workspace token, call
+   `get_paperos_integration_workspace_token(client_id, client_secret, org_id, auth_time, exp, amr, sub=None, external_id=None)`.
+   Supply exactly one linked `sub` or `external_id` and a workspace from its
+   `orgs`. Use actual integer Unix-second `auth_time`/`exp` and a nonempty
+   supported `amr` list from the app's authentication context. The developer's
+   MCP login is not that customer's login. Never fabricate a timestamp or
+   authentication method. Read the guide's existing time-window requirements;
+   `exp` does not override the issued token's lifetime. The result is
+   `{access_token}`; keep it backend-only and tied to its subject/workspace.
+   Replacement issuance needs valid credentials and claims, not a refresh token.
+
+Direct HTTP clients can use `POST` and `GET /api/integrations/setup-request` on
+the deploy service with Basic app credentials; POST accepts `{}` or no body.
+Customer creation/listing and token issuance use the existing PaperOS
+`/api/v1/integrations/*` endpoints documented in the guide. No customer Supabase
+token exchange or PaperOS connection screen is required.
+
+Read `partner-integration` for the pending release status, unresolved upstream
+client-secret verification/disclosure issue, and token compatibility limits.
+Registration or ticket completion does not prove the data integration works.
 
 ## SSO gate token flow
 
@@ -117,7 +162,8 @@ Before writing code, establish:
   `X-Auth-Request-Access-Token`, send it as `Authorization: Bearer`, and map
   errors by the API's `code` field. Failed gate renewal can require sign-in.
   For the partner flow, follow its guide's token issuance and endpoint
-  compatibility limits; registration tools do not issue customer workspace tokens.
+  compatibility limits. The token tool supports setup/verification; the app's
+  runtime code calls the documented PaperOS token endpoint with its own context.
 - App routes the browser calls; they call PaperOS on the server and return only
   what the UI needs.
 - If the app has a database: add sync tables through the app's own migration

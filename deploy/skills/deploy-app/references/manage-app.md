@@ -3,7 +3,7 @@
 Read this for code updates, post-deploy SSO, env, DNS, or lifecycle requests. Do not call
 `create_app_deployment` for routine configuration changes. It creates a new container.
 
-For PaperOS integration registration or credential recovery, use the
+For PaperOS integration registration, setup/status, linked accounts, or tokens, use the
 `paperos-api-integration` skill. Its `owner_org_id` is the owning PaperOS
 workspace, separate from this deployment's `app_name` or `run_id`. An app can
 register while hosted elsewhere or using its own login; registration does not
@@ -23,10 +23,11 @@ not available as MCP tools. Do not invent tools or harvest browser tokens to
 access its authenticated API.
 
 The optional **Partner integrations** page at `/dashboard/integrations.html`
-covers manual registration and credential recovery once released. It uses the
-developer's PaperOS workspace, not a deployment ID, and has no admin setup-request
-or ticket-status controls yet. Agents use the registration tools in the
-`paperos-api-integration` skill.
+covers registration, credential recovery, setup requests/status, and optional
+linked-user JSON export once released. It uses the developer's PaperOS workspace
+for registration and the selected app's credentials for subsequent steps, not a
+deployment ID. Admin setup remains manual. Agents use the tools in the
+`paperos-api-integration` skill without opening the dashboard.
 
 ## Redeploy Code
 
