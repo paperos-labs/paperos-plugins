@@ -13,8 +13,9 @@ Do not create another container just to update code, env vars, SSO, or DNS.
 For standalone PostgreSQL creation, connection strings, or deletion, read
 [Databases](references/databases.md). No app, repository, or template is required.
 
-For making a deployed app read or write PaperOS data through the PaperOS
-Developer API, use the `paperos-api-integration` skill.
+For registering a partner application, recovering its credentials, or making
+an app use PaperOS data, use the `paperos-api-integration` skill. No deployment
+or SSO gate is required for registration.
 
 ## Tool Map
 
@@ -38,12 +39,17 @@ Developer API, use the `paperos-api-integration` skill.
 | `list_postgres_databases()` | List the caller's database IDs, names, status, and secret connection strings. |
 | `delete_postgres_database(database_id)` | Permanently delete one database and its login, not the shared container. |
 | `get_paperos_api_integration_guide(topic="overview")` | Read-only guide for making the user's app call the PaperOS Developer API (reports, batch uploads, records, DB sync). Used by the `paperos-api-integration` skill. |
+| `list_paperos_workspaces()` | List accessible PaperOS workspaces for choosing registration ownership. |
+| `list_paperos_integrations(owner_org_id)` | List visible registrations in the owning PaperOS workspace; metadata only. |
+| `get_paperos_integration(owner_org_id, client_id)` | Read an existing registration and recover its credentials; output contains secrets. |
+| `register_paperos_integration(owner_org_id, client_name, redirect_uris, contacts=None, client_uri=None)` | Register an app under a PaperOS workspace and return client credentials; requires actual HTTPS redirect URLs. |
 
 The three container tools affect the whole container, including the app, Caddy,
 and management agent. They are not app-process controls. `replace_app_env` can
 restart the app service while applying env; it is not a standalone restart tool.
 
-Use only tools advertised by the connected server. There is no current MCP tool
+Use only tools advertised by the connected server; registration tools require
+the matching server release. There is no current MCP tool
 for listing deployments, reading live SSO state or starting a stopped container.
 The dashboard provides deployment browsing and SSO state/probes. Do not invent
 `view_deploys`, `setup_database`, or other retired/planned tools.
@@ -51,7 +57,7 @@ The dashboard provides deployment browsing and SSO state/probes. Do not invent
 ## Critical rules (read first)
 
 1. **You never write or send a setup script.** You pick a template name and supply a `template_values` dict. The server renders and runs it.
-2. **Before creating an app, call `list_app_templates` first** to discover available stacks. Database operations do not use app templates.
+2. **Before creating a deployment, call `list_app_templates` first** to discover available stacks. Database operations and integration registration do not use app templates.
 3. **ALWAYS call `get_app_template(name)`** before deploying — it returns the template content (read it to understand each value's purpose) and a `keys` list of what `template_values` can contain.
 4. **Only the keys in the `keys` list (and nothing else)** belong in `template_values`. Unknown keys are rejected server-side.
 5. **APP_NAME is automatic** — you pass it as the top-level `app_name` param to `create_app_deployment`. Don't also put it in `template_values`.

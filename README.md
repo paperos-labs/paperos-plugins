@@ -21,7 +21,7 @@ claude plugin marketplace add paperos-labs/paperos-plugins
 | Plugin | Install | What it does |
 |---|---|---|
 | **paperos-entity-setup** | `paperos-entity-setup@paperos` | Form & manage PaperOS legal entities (LLC, C-Corp, LP, funds) in chat — formation workflow, field predictions, review dashboards, and the PaperOS knowledge bases. |
-| **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy, redeploy, and manage apps, including GitHub App access, health checks, environment variables, SSO, and container lifecycle. Create, list, and delete independent PostgreSQL databases. Guide your app's integration with the PaperOS Developer API (reports, batch uploads, records, DB sync). |
+| **paperos-deploy-mcp** | `paperos-deploy-mcp@paperos` | Deploy and manage apps and independent PostgreSQL databases. Register PaperOS partner integrations, list registrations, and recover credentials, regardless of app hosting or login. Guide your app's PaperOS API integration (reports, batch uploads, records, DB sync). |
 | **paperos-transcript-extractor** | `paperos-transcript-extractor@paperos` | Run Entity Setup from your onboarding material — drop in a call transcript, notes, or documents and review extracted questionnaire answers in an embedded UI. |
 | **paperos-core-mcp** | `paperos-core-mcp@paperos` | Query PaperOS staging workspaces, reports, documents, signature status, and investor records; submit batch CSV uploads. [Setup](core/README.md). |
 
@@ -40,14 +40,30 @@ For app deployment, also open the [paper-deploy dashboard](https://deploy.onpape
 with that same PaperOS account and choose **Connect GitHub**. Each interactive
 deploy/redeploy checks your approved work-email domain, repository organization,
 linked GitHub account's current collaborator access, and the App's repository
-selection. Database-only use does not require a GitHub connection. See the
+selection. Database-only use and integration registration do not require a GitHub connection. See the
 [Integration Kit](https://deploy.onpaper.co/integration-kit) for setup and access errors.
 
 To make your app use PaperOS data, use the deploy plugin's
 [`paperos-api-integration` skill](deploy/skills/paperos-api-integration/SKILL.md).
-The SSO gate supplies a user-level OAuth token to the app backend; the API checks
-access to the workspace selected in each request and returns data. Enabling the
-gate alone does not write that integration or grant new workspace permissions.
+For apps behind the SSO gate, it supplies a user-level OAuth token to the backend;
+the API checks access to the selected workspace and returns data. For apps using
+their own login, including apps hosted elsewhere, read the `partner-integration`
+guide topic. Registration tools use the developer's MCP login and owning PaperOS
+workspace; the app's setup and token requests use its client ID and secret.
+Registration starts with `profile` scope and does not itself enable customer
+impersonation or grant workspace data access.
+
+Plugin 0.9.0 documents `list_paperos_workspaces`, `list_paperos_integrations`,
+`get_paperos_integration`, and `register_paperos_integration`. Use them only when
+advertised by the connected server; updating this plugin does not deploy the
+server. Registration requires actual HTTPS redirect URLs. List returns metadata;
+register/get return credentials that must stay in server-side secret configuration.
+Reconcile an uncertain registration with list/get instead of automatically creating again.
+
+Admin setup request/status remains a separate REST step, not an MCP tool in this
+release. The guide documents its deployment status and the outstanding upstream
+client-secret validation issue. Registration or a completed setup ticket alone
+does not prove the app's data integration works.
 This differs from the core plugin, which uses tools to work with data in chat.
 
 The core plugin connects only to `https://staging.paperos.dev/mcp`.

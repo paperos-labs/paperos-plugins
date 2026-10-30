@@ -3,6 +3,12 @@
 Read this for code updates, post-deploy SSO, env, DNS, or lifecycle requests. Do not call
 `create_app_deployment` for routine configuration changes. It creates a new container.
 
+For PaperOS integration registration or credential recovery, use the
+`paperos-api-integration` skill. Its `owner_org_id` is the owning PaperOS
+workspace, separate from this deployment's `app_name` or `run_id`. An app can
+register while hosted elsewhere or using its own login; registration does not
+require enabling this deployment's SSO gate.
+
 ## Identify the Target
 
 SSO and env tools take `app_name` and operate for the authenticated user; live
