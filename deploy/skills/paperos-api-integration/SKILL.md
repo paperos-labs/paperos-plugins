@@ -59,6 +59,13 @@ elsewhere, read `partner-integration` and use this registration workflow:
    After a timeout or unclear create result, list and get the registration to
    reconcile the outcome; do not automatically repeat registration.
 
+For manual registration, the connected deploy server's **Partner integrations**
+page is `/dashboard/integrations.html` once released. It uses the developer's
+PaperOS sign-in to choose a workspace, reuse or register an app, and reveal/copy
+credentials. The page is optional; the MCP workflow above needs no browser.
+Dashboard registration is pending release and does not yet include setup-request
+or ticket-status controls.
+
 New registrations start with `requestable_scopes: ["profile"]`. Registration
 alone does not enable impersonation, link customers, or grant workspace data access.
 Customer access still requires the app-to-user link and that user's workspace

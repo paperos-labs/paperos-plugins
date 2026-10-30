@@ -22,6 +22,12 @@ The dashboard is at the connected server's `/dashboard/`, currently
 not available as MCP tools. Do not invent tools or harvest browser tokens to
 access its authenticated API.
 
+The optional **Partner integrations** page at `/dashboard/integrations.html`
+covers manual registration and credential recovery once released. It uses the
+developer's PaperOS workspace, not a deployment ID, and has no admin setup-request
+or ticket-status controls yet. Agents use the registration tools in the
+`paperos-api-integration` skill.
+
 ## Redeploy Code
 
 ```python
