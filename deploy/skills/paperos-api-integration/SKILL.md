@@ -63,10 +63,17 @@ elsewhere, read `partner-integration` and use this registration workflow:
 For an interactive workflow, the connected deploy server's **Partner integrations**
 page is `/dashboard/integrations.html`. It uses the developer's
 PaperOS sign-in to choose a workspace, reuse or register an app, and reveal/copy
-credentials. It also requests admin setup, manually refreshes ticket status, and
-optionally shows linked users and exports `{"client_id":"oidc_...","subjects":[...]}`
-as JSON. The app secret stays in page memory, outside the export and browser
-storage. The page is optional; MCP needs no browser.
+credentials. Show/Hide credentials changes only those fields; admin setup and
+linked users remain usable and keep their state while credentials are hidden.
+Setup status is read automatically when apps load; use Refresh status for later
+updates, or Request admin setup when no ticket exists.
+
+The optional linked-users step loads the app's linked accounts. Search by name,
+email, ID, or workspace, browse 25 users per page, and expand a row for its IDs,
+scopes, and workspaces. Export JSON includes **all loaded users**, regardless of
+the search or current page, as `{"client_id":"oidc_...","subjects":[...]}`. The app
+secret stays in page memory, outside the export and browser storage. The page is
+optional; MCP needs no browser.
 
 New registrations start with `requestable_scopes: ["profile"]`. Registration
 alone does not enable impersonation, link customers, or grant workspace data access.

@@ -26,8 +26,13 @@ The optional **Partner integrations** page at `/dashboard/integrations.html`
 covers registration, credential recovery, setup requests/status, and optional
 linked-user JSON export. It uses the developer's PaperOS workspace
 for registration and the selected app's credentials for subsequent steps, not a
-deployment ID. Admin setup remains manual. Agents use the tools in the
-`paperos-api-integration` skill without opening the dashboard.
+deployment ID. Show/Hide credentials affects only the credential fields; setup
+and linked users remain usable and keep their state. Setup status is read when
+apps load; refresh it manually for later updates. Admin setup remains manual.
+Linked users support search by name, email, ID, or workspace, 25 users per page,
+and expandable details. Export JSON includes all loaded users, regardless of
+the search or current page. Agents use the tools in the `paperos-api-integration`
+skill without opening the dashboard.
 
 ## Redeploy Code
 
