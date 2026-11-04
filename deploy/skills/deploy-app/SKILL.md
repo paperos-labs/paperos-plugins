@@ -299,10 +299,18 @@ deployment details; subsequent redeploys retain it unless explicitly overridden.
 
 Pick real health paths starting with `/` on each side that return **2xx**.
 The agent probes the app's ungated serving rules on loopback, then the pipeline
-checks public HTTPS (2xx/3xx, including an existing SSO redirect). A login page
+checks public HTTPS (2xx/3xx without SSO; with SSO, a same-host 302 to
+`/oauth2/sign_in`). A login page
 cannot substitute for the underlying app check. This is not a functional test.
 Wrong routing may return frontend HTML with 200 for a backend path. Do not claim
 application correctness or a successful SSO login from smoke-test alone.
+
+**Ongoing monitoring** is opt-in on the app's dashboard, not an MCP tool.
+When the server-side Better Stack integration is configured, owners can enable
+three-minute checks of the app service, these saved paths, and public HTTPS,
+and view recent checks and incidents. Redeploys keep the setting; disabling
+pauses provider checks. Unknown is not healthy. No browser session or App API
+key is needed for these checks. Email/Slack alert delivery is not configured.
 
 **`custom_subdomain`** — optional, off by default. If the user explicitly asks for a friendly URL ("deploy at weather.onpaper.co"), pass just the prefix (`"weather"`) — the `.onpaper.co` zone is hardcoded. The pipeline creates a CNAME via Cloudflare after the smoke test passes, and the app becomes reachable at `https://<subdomain>.onpaper.co` alongside the canonical `tls-*.vms.paperos.net` URL.
 
